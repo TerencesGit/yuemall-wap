@@ -13,7 +13,11 @@ import '@/assets/css/main.scss'
 
 Vue.use(Router)
 Vue.use(MintUI)
-
+Vue.directive('title', {
+  inserted (el, binding) {
+    document.title = el.dataset.title
+  }
+})
 NProgress.configure({ ease: 'ease', speed: 500, minimum: 0.5, showSpinner: false})
 const router = new Router({
 	routes
