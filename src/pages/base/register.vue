@@ -6,7 +6,7 @@
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/user.png" class="icon">
 				</label>
-				<input type="text" class="form-item-input"  placeholder="请输入用户名" v-model.trim="form.username">
+				<input type="text" class="form-item-input"  placeholder="请输入手机号" v-model.trim="form.username">
 			</div>
 			<div class="form-item bg-white">
 				<label for="" class="form-item-label">
@@ -14,11 +14,23 @@
 				</label>
 				<input type="text" class="form-item-input"  placeholder="请输入密码" v-model.trim="form.password">
 			</div>
-			<div class="form-item">
-				<mt-button size="large" type="primary" @click.native="onSubmit">登录</mt-button>
+			<div class="form-item bg-white">
+				<label for="" class="form-item-label">
+					<img src="../../assets/img/lock.png" class="icon">
+				</label>
+				<input type="text" class="form-item-input"  placeholder="请再次输入密码" v-model.trim="form.password">
+			</div>
+			<div class="form-item bg-white">
+				<label for="" class="form-item-label">
+					<img src="../../assets/img/lock.png" class="icon">
+				</label>
+				<input type="text" class="form-item-input"  placeholder="请输入验证码" v-model.trim="form.password">
 			</div>
 			<div class="form-item">
-				<mt-button size="large" type="default" plain @click.native="handleSignup">新用户注册</mt-button>
+				<mt-button size="large" type="primary" @click.native="onSubmit">立即注册</mt-button>
+			</div>
+			<div class="form-item">
+				<mt-button size="large" type="default" plain @click.native="handleSignin">去登录</mt-button>
 			</div>
 		</div>
 	</div>
@@ -44,7 +56,7 @@
 			onSubmit() {
 				let self = this;
 				if(this.form.username == '') {
-					this.showToast('请输入用户名')
+					this.showToast('请输入手机号')
 				} else if (this.form.password == '') {
 					this.showToast('请输入密码')
 				} else {
@@ -70,8 +82,8 @@
 					})
 				}
 			},
-			handleSignup() {
-				this.$router.push('/register')
+			handleSignin() {
+				this.$router.push('/login')
 			}
 		}
 	}

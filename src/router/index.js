@@ -1,6 +1,7 @@
 
 import Index from '@/pages/index'
 import Login from '@/pages/base/login'
+import Register from '@/pages/base/register'
 
 const routes = [
   {
@@ -10,8 +11,13 @@ const routes = [
   },
   {
     path: '/login',
-    name: '登录',
+    name: '欢迎登录',
     component: Login
+  },
+  {
+    path: '/register',
+    name: '欢迎注册',
+    component: Register
   },
 ]
 export default routes
