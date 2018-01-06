@@ -14,10 +14,10 @@
 				</label>
 				<input type="text" class="form-item-input"  placeholder="请输入密码" v-model.trim="form.password">
 			</div>
-			<div class="form-item">
+			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">登录</mt-button>
 			</div>
-			<div class="form-item">
+			<div class="form-button">
 				<mt-button size="large" type="default" plain @click.native="handleSignup">新用户注册</mt-button>
 			</div>
 		</div>
@@ -82,5 +82,8 @@
 	}
 	.icon {
 		width: 20px;
+	}
+	.form-button {
+		margin: 15px 10px;
 	}
 </style>
