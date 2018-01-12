@@ -11,6 +11,34 @@
 				</mt-swipe-item>
 			</mt-swipe>
 		</div>
+		<div class="navbar">
+			<ul class="nav-list">
+				<li>
+					<router-link to="/">
+						<img src="../assets/img/nav_native.png" alt="">
+						<span>国内摄影</span>
+					</router-link>
+				</li>
+				<li>
+					<router-link to="/">
+						<img src="../assets/img/nav_oversea.png" alt="">
+						<span>国外摄影</span>
+					</router-link>
+				</li>
+				<li>
+					<router-link to="/">
+						<img src="../assets/img/nav_global.png" alt="">
+						<span>全球旅拍</span>
+					</router-link>
+				</li>
+				<li>
+					<router-link to="/">
+						<img src="../assets/img/nav_tourism.png" alt="">
+						<span>旅游</span>
+					</router-link>
+				</li>
+			</ul>
+		</div>
 	</section>
 </template>
 <script>
@@ -76,6 +104,19 @@
 			display: block;
 			width: 100%;
 			height: auto;
+		}
+	}
+	.nav-list {
+		display: flex;
+		li {
+			flex: 1;
+			margin: 10px;
+			text-align: center;
+			img {
+				display: block;
+				width: 100%;
+				margin-bottom: 5px;
+			}
 		}
 	}
 </style>
