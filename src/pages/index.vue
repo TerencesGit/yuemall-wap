@@ -1,6 +1,7 @@
 <template>
 	<section>
-		<h1><router-link to="/login">Wap首页</router-link></h1>
+		<HeaederComp></HeaederComp>
+		<!-- <h1><router-link to="/login">Wap首页</router-link></h1> -->
 		<div class="swipe-wrap">
 			<mt-swipe>
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
@@ -42,6 +43,7 @@
 	</section>
 </template>
 <script>
+	import HeaederComp from '../components/header'
 	export default {
 		data () {
 			return {
@@ -86,6 +88,9 @@
 				],
 			}
 		},
+		components: {
+			HeaederComp,
+		},
 		methods: {
 		}
 	}
@@ -108,13 +113,16 @@
 	}
 	.nav-list {
 		display: flex;
+		background: #fff;
 		li {
 			flex: 1;
-			margin: 10px;
+			margin: 5px;
+			padding: 5px 10px;
 			text-align: center;
 			img {
 				display: block;
 				width: 100%;
+				padding: 5px;
 				margin-bottom: 5px;
 			}
 		}
