@@ -40,6 +40,11 @@
 				</li>
 			</ul>
 		</div>
+		<div class="tabbar">
+			<h3 class="tab-title">全球100+旅游目的地</h3>
+			<div class="tab-header"></div>
+			<div class="tab-body"></div>
+		</div>
 	</section>
 </template>
 <script>
@@ -119,12 +124,25 @@
 			margin: 5px;
 			padding: 5px 10px;
 			text-align: center;
+			a {
+				color: #808080;
+				font-size: 12px;
+			}
 			img {
 				display: block;
 				width: 100%;
 				padding: 5px;
 				margin-bottom: 5px;
 			}
+		}
+	}
+	.tabbar {
+		margin-top: 10px;
+		background: #fff;
+		.tab-title {
+			text-align: center;
+			font-weight: normal;
+			padding: 10px 0;
 		}
 	}
 </style>
