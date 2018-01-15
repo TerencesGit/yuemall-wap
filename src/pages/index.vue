@@ -1,41 +1,23 @@
 <template>
 	<section>
-		<HeaederComp></HeaederComp>
+		<HeaederComp :store="store"></HeaederComp>
 		<!-- <h1><router-link to="/login">Wap首页</router-link></h1> -->
 		<div class="swipe-wrap">
 			<mt-swipe>
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 					<router-link to="/">
 					<!-- {background: 'url('+item.imgUrl+') center center no-repeat'} -->
-			      <img :src="item.imgUrl" :alt="item.wareName">
+			      <img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
 			    </router-link>
 				</mt-swipe-item>
 			</mt-swipe>
 		</div>
 		<div class="navbar">
 			<ul class="nav-list">
-				<li>
+				<li v-for="kind in kindList" :index="kind.id">
 					<router-link to="/">
-						<img src="../assets/img/nav_native.png" alt="">
-						<span>国内摄影</span>
-					</router-link>
-				</li>
-				<li>
-					<router-link to="/">
-						<img src="../assets/img/nav_oversea.png" alt="">
-						<span>国外摄影</span>
-					</router-link>
-				</li>
-				<li>
-					<router-link to="/">
-						<img src="../assets/img/nav_global.png" alt="">
-						<span>全球旅拍</span>
-					</router-link>
-				</li>
-				<li>
-					<router-link to="/">
-						<img src="../assets/img/nav_tourism.png" alt="">
-						<span>旅游</span>
+						<img :src="kind.imgSrc" alt="">
+						<span>{{kind.kindName}}</span>
 					</router-link>
 				</li>
 			</ul>
@@ -49,54 +31,78 @@
 </template>
 <script>
 	import HeaederComp from '../components/header'
+	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist } from '@/api'
 	export default {
 		data () {
 			return {
-				bannerList: [
-					{
-						wareId: 1000000020170801,
-						wareName: '【巴厘岛蜜月旅拍婚纱摄影6天4晚游】一对一司导+接送机+一日全天拍摄+国际五星',
-						url: '/detail?wareId=1000000020170801',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097801640378.jpg'
-					},
-					{
-						wareId: 1000000020170801,
-						wareName: '【巴厘岛蜜月旅拍婚纱摄影6天4晚游】一对一司导+接送机+一日全天拍摄+国际五星',
-						url: '/detail?wareId=1000000020170801',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097801363816.jpg'
-					}, 
-					{
-						wareId: 1000000020170802,
-						wareName: '【圣托里尼旅拍婚纱照2日1晚游】 赠送拍摄用车+酒店接送+一对一服务',
-						url: '/detail?wareId=1000000020170802',
-						// imgUrl: 'http://www.fookvision.com/Public/Wwwfookvisioncom/images/index/banner3.jpg',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097800771313.jpg'
-					},
-					{
-						wareId: 1000000020170803,
-						wareName: '【美国塞班岛婚纱照2天1晚】碧海蓝天+悬崖码头+凤凰花',
-						url: '/detail?wareId=1000000020170803',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097801001784.jpg'
-					},
-					{
-						wareId: 1000000020170804,
-						wareName: '【巴黎旅拍婚纱照2日1晚游】 任选5个景点+全天拍摄用车+一对一服务',
-						url: '/detail?wareId=1000000020170804',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097801785379.jpg'
-					},
-					{
-						wareId: 1000000020170805,
-						wareName: '【三亚旅拍婚纱照2日1晚游】 赠送拍摄用车+酒店接送+一对一服务',
-						url: '/detail?wareId=1000000020170805',
-						imgUrl: 'http://fileServer.yueshijue.com/fileService/uploads/2017/11/04/415097801493037.jpg'
-					}
-				],
+				store: {},
+				bannerList: [],
+				kindList: [],
 			}
 		},
 		components: {
 			HeaederComp,
 		},
 		methods: {
+			getStore() {
+				findStoreByWapDoMain().then(res => {
+					console.log(res)
+					if(res.data.status === 1) {
+						let storeId = res.data.data;
+						this.getMerchantStore(storeId)
+					}
+				})
+			},
+			getMerchantStore(storeId) {
+				let data = {
+					id: storeId
+				}
+				findmerchantStoreBystoreId(data).then(res => {
+					if(res.data.status === 1) {
+						console.log(res.data.data)
+						this.store = res.data.data;
+						let merchantId = res.data.data.merchantId
+						this.getBannerList(merchantId)
+						this.getKindList(merchantId)
+						let store = JSON.stringify(res.data.data);
+						sessionStorage.setItem('store', store)
+					}
+				})
+			},
+			getBannerList(merchantId) {
+				let data = {
+					merchantId
+				}
+				bannermobilelist(data).then(res => {
+					if(res.data.status === 1) {
+						console.log(res.data)
+						this.bannerList = res.data.data;
+					}
+				})
+			},
+			getKindList(providerId) {
+				let data = {
+					providerId
+				}
+				let kindImgSrc = [
+					'http://wap.yueshijue.com/assets/img/gnsy.png',
+					'http://wap.yueshijue.com/assets/img/ly.png',
+					'http://wap.yueshijue.com/assets/img/qqlp.png',
+					'http://wap.yueshijue.com/assets/img/gwsy.png',
+				]
+				kindlist(data).then(res => {
+					if(res.data.status === 1) {
+						console.log(res.data.data)
+						this.kindList = res.data.data;
+						this.kindList.forEach((kind, index) => {
+							kind.imgSrc = kindImgSrc[index];
+						})
+					}
+				})
+			},
+		},
+		created() {
+			this.getStore()
 		}
 	}
 </script>
