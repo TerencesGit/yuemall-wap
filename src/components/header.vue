@@ -9,7 +9,6 @@
 				<input type="search" placeholder="搜索目的地" class="mint-searchbar-core">
 			</div>
 			<!-- <mt-search v-model="value" :result.sync="result"></mt-search> -->
-			<!-- <input type="text" placeholder="搜索目的地"> -->
 		</div>
 	</header>
 </template>
@@ -18,7 +17,6 @@
 		data() {
 			return {
 				value: '搜索目的地',
-				result: ['1','2','3','4'],
 			}
 		},
 		props: ['store'],

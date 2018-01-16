@@ -1,5 +1,6 @@
 <template>
 	<section>
+		<div v-title :data-title="$route.name"></div>
 		<HeaederComp :store="store"></HeaederComp>
 		<!-- <h1><router-link to="/login">Wap首页</router-link></h1> -->
 		<div class="swipe-wrap">
@@ -34,12 +35,12 @@
 			<div class="tab-body">
 				<ul class="ware-list clearfix" :style="{width: recommendListWidth}">
 					<li v-for="ware in recommendWare" class="ware-item">
-						<router-link to="/">
+						<router-link :to="'detail?id='+ware.id">
 							<img :src="ware.mainImg" alt="">
 							<div class="ware-detail">
 								<p class="ellipsis">{{ware.wareName}}</p>
-								<p class="price">
-									<i class="icon-rmb">￥</i><span>{{ware.suggestedPrice}}</span>
+								<p class="price text-price">
+									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
 									<span>{{ware.unit}}</span>/起
 								</p>
 							</div>
@@ -67,14 +68,19 @@
 			<div class="warelist-body">
 				<ul class="ware-list">
 					<li v-for="ware in globalWareList" :index="ware.id" class="ware-item">
-						<img :src="ware.mainImg" class="ware-img">
-						<div class="ware-detail">
-							<h4 class="ware-name">{{ware.wareName}}</h4>
-							<ul class="ware-keywords clearfix">
-								<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
-							</ul>
-							<p><i class="icon-rmb">￥</i><span>{{ware.suggestedPrice}}</span>起</p>
-						</div>
+						<router-link :to="'detail?id='+ware.id">
+							<img v-lazy="ware.mainImg" class="ware-img">
+							<div class="ware-detail">
+								<h4 class="ware-name">{{ware.wareName}}</h4>
+								<ul class="ware-keywords clearfix">
+									<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
+								</ul>
+								<p class="price text-price">
+									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
+									<span>{{ware.unit}}</span>/起
+								</p>
+							</div>
+						</router-link>
 					</li>
 				</ul>
 			</div>
@@ -87,18 +93,24 @@
 			<div class="warelist-body">
 				<ul class="ware-list">
 					<li v-for="ware in tripWareList" :index="ware.id" class="ware-item">
-						<img :src="ware.mainImg" class="ware-img">
-						<div class="ware-detail">
-							<h4 class="ware-name">{{ware.wareName}}</h4>
-							<ul class="ware-keywords clearfix">
-								<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
-							</ul>
-							<p><i class="icon-rmb">￥</i><span>{{ware.suggestedPrice}}</span>起</p>
-						</div>
+						<router-link :to="'detail?id='+ware.id">
+							<img v-lazy="ware.mainImg" class="ware-img">
+							<div class="ware-detail">
+								<h4 class="ware-name">{{ware.wareName}}</h4>
+								<ul class="ware-keywords clearfix">
+									<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
+								</ul>
+								<p class="price text-price">
+									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
+									<span>{{ware.unit}}</span>/起
+								</p>
+							</div>
+						</router-link>
 					</li>
 				</ul>
 			</div>
 		</div>
+		<div style="height: 30px;"></div>
 		<FooterComp></FooterComp>
 	</section>
 </template>
@@ -252,6 +264,11 @@
 	h1 {
 		text-align: center;
 	}
+	image[lazy=loading] {
+	  width: 40px;
+	  height: 300px;
+	  margin: auto;
+	}
 	.swipe-wrap {
 		height: 172px;
 		.mint-swipe-item {
@@ -336,10 +353,14 @@
 					}
 					.ware-detail {
 						padding: 3px 5px;
+						color: #666;
 					}
 				}
 			}
 		}
+	}
+	.text-price {
+		color: #f00;
 	}
 	.warelist-header {
 		display: flex;
@@ -356,10 +377,13 @@
 		padding: 15px;
 		.ware-list {
 			.ware-item {
-				display: flex;
 				padding-bottom: 10px;
 				margin-bottom: 20px;
 				border-bottom: 1px solid #ccc;
+				a {
+					display: flex;
+					color: #666;
+				}
 				.ware-img {
 					width: 128px;
 					height: 92px;
