@@ -99,10 +99,12 @@
 				</ul>
 			</div>
 		</div>
+		<FooterComp></FooterComp>
 	</section>
 </template>
 <script>
 	import HeaederComp from '../components/header'
+	import FooterComp from '../components/footer'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
 	export default {
@@ -121,6 +123,7 @@
 		},
 		components: {
 			HeaederComp,
+			FooterComp,
 		},
 		methods: {
 			getStore() {
@@ -267,7 +270,7 @@
 		li {
 			flex: 1;
 			margin: 5px;
-			padding: 5px 10px;
+			padding: 0 10px 5px;
 			text-align: center;
 			a {
 				color: #808080;
@@ -277,7 +280,6 @@
 				display: block;
 				width: 100%;
 				padding: 5px;
-				margin-bottom: 5px;
 			}
 		}
 	}
@@ -293,8 +295,6 @@
 			width: 100%;
 			overflow-x: scroll;
 			.dstcity-list {
-				width: 4000px;
-				// padding: 15px 0;
 				border-top: 1px solid #ccc;
 				border-bottom: 1px solid #ccc;
 				li {
@@ -332,6 +332,7 @@
 					border: 1px solid #ddd;
 					img {
 						width: 100%;
+						height: 83px;
 					}
 					.ware-detail {
 						padding: 3px 5px;
@@ -373,7 +374,7 @@
 						li {
 							float: left;
 							margin: 3px 6px 0 0;
-							padding: 0 2px;
+							padding: 1px 3px;
 							font-size: 12px;
 							border: 1px solid #ccc;
 						}
