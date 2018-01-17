@@ -1,7 +1,8 @@
 
-import Index from '@/pages/index'
 import Login from '@/pages/base/login'
 import Register from '@/pages/base/register'
+import Index from '@/pages/index'
+import WareDetail from '@/pages/ware/detail'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/register',
     name: '欢迎注册',
     component: Register
+  },
+  {
+    path: '/ware/detail',
+    name: '商品详情页',
+    component: WareDetail
   },
 ]
 export default routes

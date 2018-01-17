@@ -2,7 +2,6 @@
 	<section>
 		<div v-title :data-title="$route.name"></div>
 		<HeaederComp :store="store"></HeaederComp>
-		<!-- <h1><router-link to="/login">Wap首页</router-link></h1> -->
 		<div class="swipe-wrap">
 			<mt-swipe>
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
@@ -35,7 +34,7 @@
 			<div class="tab-body">
 				<ul class="ware-list clearfix" :style="{width: recommendListWidth}">
 					<li v-for="ware in recommendWare" class="ware-item">
-						<router-link :to="'detail?id='+ware.id">
+						<router-link :to="'ware/detail?id='+ware.id">
 							<img :src="ware.mainImg" alt="">
 							<div class="ware-detail">
 								<p class="ellipsis">{{ware.wareName}}</p>
@@ -68,7 +67,7 @@
 			<div class="warelist-body">
 				<ul class="ware-list">
 					<li v-for="ware in globalWareList" :index="ware.id" class="ware-item">
-						<router-link :to="'detail?id='+ware.id">
+						<router-link :to="'ware/detail?id='+ware.id">
 							<img v-lazy="ware.mainImg" class="ware-img">
 							<div class="ware-detail">
 								<h4 class="ware-name">{{ware.wareName}}</h4>
@@ -93,7 +92,7 @@
 			<div class="warelist-body">
 				<ul class="ware-list">
 					<li v-for="ware in tripWareList" :index="ware.id" class="ware-item">
-						<router-link :to="'detail?id='+ware.id">
+						<router-link :to="'ware/detail?id='+ware.id">
 							<img v-lazy="ware.mainImg" class="ware-img">
 							<div class="ware-detail">
 								<h4 class="ware-name">{{ware.wareName}}</h4>
@@ -311,6 +310,10 @@
 		.tab-header {
 			width: 100%;
 			overflow-x: scroll;
+			-webkit-overflow-scrolling: touch;
+			&::-webkit-scrollbar {
+				display: none;
+			}
 			.dstcity-list {
 				border-top: 1px solid #ccc;
 				border-bottom: 1px solid #ccc;
@@ -342,6 +345,9 @@
 			width: 100%;
 			overflow-x: scroll;
 			.ware-list {
+				&::-webkit-scrollbar {
+					display: none;
+				}
 				li {
 					float: left;
 					width: 150px;
