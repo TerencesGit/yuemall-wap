@@ -168,7 +168,11 @@
 				let data = {
 					merchantId
 				}
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				bannermobilelist(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						console.log(res.data)
 						this.bannerList = res.data.data;
@@ -222,11 +226,15 @@
 				})
 			},
 			getGlobalWareList() {
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				let data = {
 					kindCode: 'tripphoto-TP',
 					providerId: this.providerId,
 				}
 				warelist(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						console.log(res.data.data)
 						this.globalWareList = res.data.data;

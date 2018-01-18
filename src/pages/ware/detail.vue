@@ -82,7 +82,11 @@
 				let data = {
 					id: wareId
 				}
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				wareDetail(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						 console.log(res.data.data)
 						 this.wareDetail = res.data.data;
@@ -95,7 +99,11 @@
 				let data = {
 					wareId
 				}
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				wareAttribut(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						console.log(res.data.data)
 						this.wareAttribute = res.data.data;
