@@ -27,6 +27,13 @@
 				<input type="text" class="form-item-input"  placeholder="请输入验证码" v-model.trim="form.authCode">
 				<canvas id="canvasCode" width="80px" height="30px" class="canvas-code" @click="drawCode"></canvas>
 			</div>
+			<div class="form-item bg-white smscode">
+				<label for="" class="form-item-label">
+					<img src="../../assets/img/yzm.png" class="icon">
+				</label>
+				<input type="text" class="form-item-input"  placeholder="请输入手机验证码" v-model.trim="form.smsCode">
+				<mt-button type="primary"class="small-size" @click.native="sendCode" :disabled="disabled">{{buttonText}}</mt-button>
+			</div>
 			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">立即注册</mt-button>
 			</div>
@@ -38,7 +45,7 @@
 </template>
 <script>
 	import Utils from '@/assets/js/utils'
-	import { requestRegister } from '@/api'
+	import { requestRegister, smsverificode } from '@/api'
 	export default {
 		data() {
 			return {
@@ -47,8 +54,11 @@
 					password: '',
 					password2: '',
 					authCode: '',
+					smsCode: '',
 				},
 				authCode: '',
+				buttonText: '获取验证码',
+				disabled: false,
 			}
 		},
 		methods: {
@@ -60,6 +70,41 @@
 			},
 			drawCode () {
         this.authCode = Utils.canvasCode('canvasCode')
+      },
+      countDown () {
+			  let count = 10;
+			  var timer;
+			  timer = setInterval(() => {
+			      if (count === 0) {
+			        clearInterval(timer)
+			        count = 10;
+			        this.disabled = false
+			        this.buttonText = '重新获取'
+			      } else {
+			        count--;
+			        this.buttonText = `重新获取${count--}s`
+			      }
+			    }, 1000)
+		  },
+      sendCode() {
+      	if(!this.form.username.match(/^(13|14|15|17|18)\d{9}$/)) {
+					this.showToast('请输入正确手机号')
+					return;
+				}
+				this.disabled = true;
+				this.countDown()
+      	let data = {
+      		phone: this.form.username,
+      	}
+      	smsverificode(data).then(res => {
+      		console.log(res)
+      		if(res.data.status === 1) {
+      			this.showToast('短信验证码已发送')
+      			this.countDown()
+      		} else {
+      			this.showToast(res.data.msg)
+      		}
+      	})
       },
 			onSubmit() {
 				let self = this;
@@ -78,12 +123,16 @@
 				} else if(this.form.authCode.toUpperCase() !== this.authCode.toUpperCase()){
 					this.showToast('验证码输入错误')
 					return;
+				} else if (this.form.smsCode.length === 0) {
+					this.showToast('请输入手机验证码')
+					return;
 				}
 				let data = {
 					username: this.form.username,
 					password: this.form.password,
 					registerType: 1,
 					storeId: 23,
+					code: this.form.smsCode,
 				}
 				this.$indicator.open({
 				  text: '正在注册...',
