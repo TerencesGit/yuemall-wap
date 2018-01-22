@@ -77,11 +77,10 @@
 			  timer = setInterval(() => {
 			      if (count === 0) {
 			        clearInterval(timer)
-			        count = 10;
+			        count = 60;
 			        this.disabled = false
 			        this.buttonText = '重新获取'
 			      } else {
-			        count--;
 			        this.buttonText = `重新获取${count--}s`
 			      }
 			    }, 1000)
@@ -91,14 +90,13 @@
 					this.showToast('请输入正确手机号')
 					return;
 				}
-				this.disabled = true;
-				this.countDown()
       	let data = {
       		phone: this.form.username,
       	}
       	smsverificode(data).then(res => {
       		console.log(res)
       		if(res.data.status === 1) {
+      			this.disabled = true;
       			this.showToast('短信验证码已发送')
       			this.countDown()
       		} else {
@@ -135,7 +133,7 @@
 					code: this.form.smsCode,
 				}
 				this.$indicator.open({
-				  text: '正在注册...',
+				  text: '注册中...',
 				  spinnerType: 'snake'
 				})
 				requestRegister(data).then(res => {

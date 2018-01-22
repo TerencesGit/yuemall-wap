@@ -2,120 +2,49 @@
 	<section>
 		<div v-title :data-title="$route.name"></div>
 		<HeaederComp :store="store"></HeaederComp>
-		<div class="swipe-wrap">
-			<mt-swipe>
-				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
-					<router-link to="/">
-					<!-- {background: 'url('+item.imgUrl+') center center no-repeat'} -->
-			      <img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
-			    </router-link>
-				</mt-swipe-item>
-			</mt-swipe>
-		</div>
-		<div class="navbar">
-			<ul class="nav-list">
-				<li v-for="kind in kindList" :index="kind.id">
-					<router-link to="/">
-						<img :src="kind.imgSrc" alt="">
-						<span>{{kind.kindName}}</span>
-					</router-link>
-				</li>
-			</ul>
-		</div>
-		<div class="tabbar">
-			<h3 class="tab-title">全球100+旅游目的地</h3>
-			<div class="tab-header">
-				<ul class="dstcity-list clearfix" :style="{width: cityListWidth}">
-					<li v-for="(city, index) in dstCity" :index="city.id" v-bind:class="{'active': index === checkedIndex}" @click="checkedCity(index,city.dstCityCode)">
-						<a href="javascript:;">{{city.name}}</a>
-					</li>
-				</ul>
-			</div>
-			<div class="tab-body">
-				<ul class="ware-list clearfix" :style="{width: recommendListWidth}">
-					<li v-for="ware in recommendWare" class="ware-item">
-						<router-link :to="'ware/detail?id='+ware.id">
-							<img :src="ware.mainImg" alt="">
-							<div class="ware-detail">
-								<p class="ellipsis">{{ware.wareName}}</p>
-								<p class="price text-price">
-									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
-									<span>{{ware.unit}}</span>/起
-								</p>
-							</div>
-						</router-link>
-					</li>
-				</ul>
+		<mt-swipe style="height: 172px;">
+			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
+				<router-link to="/">
+		      <img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
+		    </router-link>
+			</mt-swipe-item>
+		</mt-swipe>
+		<Navbar :navData="kindList"></Navbar>
+		<div class="global-city">
+			<h3 class="global-title">全球100+旅游目的地</h3>
+			<ScrollCityList :cityList="dstCity" :listWidth="cityListWidth" @cityClick="handleCityClick"></ScrollCityList>
+			<div class="global-city-list">
+				<WareHorizontalList :wareData="recommendWare" :listWidth="recommendListWidth"></WareHorizontalList>
 			</div>
 		</div>
-		<div class="local-photo">
-			<div class="warelist-header">
-				<h3 class="title">本地拍摄</h3>
-				<router-link to="/">更多</router-link>
-			</div>
+		<div class="ware-show local">
+			<ShowTitle :titleName="'本地拍摄'" :moreLink="'/local'"></ShowTitle>
 			<div class="warelist-body">
 				<ul class="ware-list">
 					<li></li>
 				</ul>
 			</div>
 		</div>
-		<div class="global-photo">
-			<div class="warelist-header">
-				<h3 class="title">全球旅拍</h3>
-				<router-link to="/">更多</router-link>
-			</div>
-			<div class="warelist-body">
-				<ul class="ware-list">
-					<li v-for="ware in globalWareList" :index="ware.id" class="ware-item">
-						<router-link :to="'ware/detail?id='+ware.id">
-							<img v-lazy="ware.mainImg" class="ware-img">
-							<div class="ware-detail">
-								<h4 class="ware-name">{{ware.wareName}}</h4>
-								<ul class="ware-keywords clearfix">
-									<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
-								</ul>
-								<p class="price text-price">
-									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
-									<span>{{ware.unit}}</span>/起
-								</p>
-							</div>
-						</router-link>
-					</li>
-				</ul>
-			</div>
+		<div class="ware-show global">
+			<ShowTitle :titleName="'全球旅拍'"></ShowTitle>
+			<WareList :wareData="globalWareList"></WareList>
 		</div>
-		<div class="travel-photo">
-			<div class="warelist-header">
-				<h3 class="title">旅游线路</h3>
-				<router-link to="/">更多</router-link>
-			</div>
-			<div class="warelist-body">
-				<ul class="ware-list">
-					<li v-for="ware in tripWareList" :index="ware.id" class="ware-item">
-						<router-link :to="'ware/detail?id='+ware.id">
-							<img v-lazy="ware.mainImg" class="ware-img">
-							<div class="ware-detail">
-								<h4 class="ware-name">{{ware.wareName}}</h4>
-								<ul class="ware-keywords clearfix">
-									<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
-								</ul>
-								<p class="price text-price">
-									<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
-									<span>{{ware.unit}}</span>/起
-								</p>
-							</div>
-						</router-link>
-					</li>
-				</ul>
-			</div>
+		<div class="ware-show travel">
+			<ShowTitle :titleName="'旅游线路'"></ShowTitle>
+			<WareList :wareData="tripWareList"></WareList>
 		</div>
 		<div style="height: 30px;"></div>
 		<FooterComp></FooterComp>
 	</section>
 </template>
 <script>
-	import HeaederComp from '../components/header'
-	import FooterComp from '../components/footer'
+	import HeaederComp from '../components/index/header'
+	import FooterComp from '../components/index/footer'
+	import Navbar from '../components/index/navbar'
+	import ScrollCityList from '../components/index/cityList'
+	import ShowTitle from '../components/index/listTitle'
+	import WareList from '../components/index/wareList'
+	import WareHorizontalList from '../components/index/wareHorizontalList'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
 	export default {
@@ -135,6 +64,11 @@
 		components: {
 			HeaederComp,
 			FooterComp,
+			Navbar,
+			ShowTitle,
+			WareList,
+			WareHorizontalList,
+			ScrollCityList,
 		},
 		methods: {
 			getStore() {
@@ -210,9 +144,8 @@
 					}
 				})
 			},
-			checkedCity(index, code) {
-				this.checkedIndex = index;
-				this.getRecommentWareList(this.providerId, code)
+			handleCityClick(cityCode) {
+				this.getRecommentWareList(this.providerId, cityCode)
 			},
 			getRecommentWareList(providerId, dstCityCode) {
 				let data = {
@@ -264,92 +197,26 @@
 		},
 		created() {
 			this.getStore()
-		}
+		} 
 	}
 </script>
 <style scoped lang="scss">
-	h1 {
-		text-align: center;
-	}
-	image[lazy=loading] {
-	  width: 40px;
-	  height: 300px;
-	  margin: auto;
-	}
-	.swipe-wrap {
-		height: 172px;
-		.mint-swipe-item {
-			display: block;
-			width: 100%;
-		}
+	.mint-swipe {
 		img {
 			display: block;
 			width: 100%;
 			height: auto;
 		}
 	}
-	.nav-list {
-		display: flex;
-		background: #fff;
-		li {
-			flex: 1;
-			margin: 5px;
-			padding: 0 10px 5px;
-			text-align: center;
-			a {
-				color: #808080;
-				font-size: 12px;
-			}
-			img {
-				display: block;
-				width: 100%;
-				padding: 5px;
-			}
-		}
-	}
-	.tabbar {
+	.global-city {
 		margin-top: 10px;
 		background: #fff;
-		.tab-title {
+		.global-title {
 			text-align: center;
 			font-weight: normal;
 			padding: 10px 0;
 		}
-		.tab-header {
-			width: 100%;
-			overflow-x: scroll;
-			-webkit-overflow-scrolling: touch;
-			&::-webkit-scrollbar {
-				display: none;
-			}
-			.dstcity-list {
-				border-top: 1px solid #ccc;
-				border-bottom: 1px solid #ccc;
-				li {
-					float: left;
-					width: 80px;
-					padding: 8px 0;
-					text-align: center;
-					&:last-child {
-						a {
-							border-right: 0;
-						}
-					}
-					&.active {
-						border-bottom: 2px solid #00aaef;
-						a {
-							color: #00aaef;
-						}
-					}
-					a {
-						display: block;
-						color: #666;
-						border-right: 1px solid #ccc;
-					}
-				}
-			}
-		}
-		.tab-body {
+		.global-city-list {
 			width: 100%;
 			overflow-x: scroll;
 			.ware-list {
@@ -376,52 +243,7 @@
 	.text-price {
 		color: #f00;
 	}
-	.warelist-header {
-		display: flex;
-		justify-content: space-between;
-		padding: 20px 10px;
-		background: #fff;
-		border-bottom: 1px solid #ebebeb;
-		.title {
-			padding-left: 10px;
-			border-left: 3px solid #00aaef;
-		}
-	}
-	.warelist-body {
-		padding: 15px;
-		.ware-list {
-			.ware-item {
-				padding-bottom: 10px;
-				margin-bottom: 20px;
-				border-bottom: 1px solid #ccc;
-				a {
-					display: flex;
-					color: #666;
-				}
-				.ware-img {
-					width: 128px;
-					height: 92px;
-					margin-right: 10px;
-				}
-				.ware-detail {
-					flex: 1;
-					.ware-name {
-						font-weight: normal;
-					}
-					.ware-keywords {
-						li {
-							float: left;
-							margin: 3px 6px 0 0;
-							padding: 1px 3px;
-							font-size: 12px;
-							border: 1px solid #ccc;
-						}
-					}
-				}
-			}
-		}
-	}
-	.local-photo, .global-photo, .travel-photo {
+	.ware-show {
 		margin-top: 10px;
 		background: #fff;
 	}

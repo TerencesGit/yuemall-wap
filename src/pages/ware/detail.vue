@@ -2,7 +2,7 @@
 	<section>
 		<div v-title :data-title="$route.name"></div>
 		<div class="ware-swipe">
-			<mt-swipe>
+			<mt-swipe :showIndicators="false">
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 					<img :src="item.filePath">
 				</mt-swipe-item>
@@ -38,9 +38,9 @@
 			<h3 class="attr-title">店长推荐</h3>
 			<div v-html="wareDetail.wareDesc"></div>
 		</div>
-		<div class="detail-section" v-for="(item, index) in wareAttribute">
-			<h3 class="attr-title">{{attrbuteName[index]}}</h3>
-			<div v-html="item" class="ware-attr"></div>
+		<div class="detail-section" v-for="(item, index) in attributeList">
+			<h3 class="attr-title">{{attributeName[item.title]}}</h3>
+			<div v-html="item.content" class="ware-attr"></div>
 		</div>
 		<!-- <FooterComp></FooterComp> -->
 	</section>
@@ -57,20 +57,28 @@
 				bannerList: [],
 				wareDetail: {},
 				wareAttribute: {},
-				attrbuteName: {
-					QIANZHENGQIANZHU: '签证/签注',
-					ZILIFEIYONG: '自理费用',
-					YUDINGXUZHI: '预定须知',
-					TUIGAIGUIZE: '退改规则',
+				attrOrder: [
+					'CHANPINJIESHAO',
+					'CHANPINCANSHU',
+					'FEIYONGSHUOMING',
+					'FEIYONGBAOHAN',
+					'YUDINGXUZHI',
+					'ZILIFEIYONG',
+					'TUIGAIGUIZE',
+					'QIANZHENGQIANZHU',
+				],
+				attributeName: {
 					CHANPINJIESHAO: '产品介绍',
+					CHANPINCANSHU: '产品参数',
+					FEIYONGSHUOMING: '费用说明',
+					FEIYONGBAOHAN: '费用包含',
+					YUDINGXUZHI: '预定须知',
+					ZILIFEIYONG: '自理费用',
+					TUIGAIGUIZE: '退改规则',
+					QIANZHENGQIANZHU: '签证/签注',
 				},
+				attributeList: [],
 				keyWords: [],
-				kindList: [],
-				dstCity: [],
-				recommendWare: [],
-				checkedIndex: 0,
-				globalWareList: [],
-				tripWareList: [],
 			}
 		},
 		components: {
@@ -105,8 +113,16 @@
 				wareAttribut(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						console.log(res.data.data)
-						this.wareAttribute = res.data.data;
+						this.attrOrder.forEach(attr => {
+							console.log(attr)
+							let attrObj = {
+								title: attr,
+								content: res.data.data[attr]
+							}
+							if(attrObj.content) {
+								this.attributeList.push(attrObj)
+							}
+						})
 					}
 				})
 			},
