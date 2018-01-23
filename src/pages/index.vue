@@ -1,7 +1,6 @@
 <template>
 	<section>
-		<div v-title :data-title="$route.name"></div>
-		<HeaederComp :store="store"></HeaederComp>
+		<HeaederComp></HeaederComp>
 		<mt-swipe style="height: 172px;">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 				<router-link to="/">
@@ -9,7 +8,7 @@
 		    </router-link>
 			</mt-swipe-item>
 		</mt-swipe>
-		<Navbar :navData="kindList"></Navbar>
+		<Navbar :navData="navList"></Navbar>
 		<div class="global-city">
 			<h3 class="global-title">全球100+旅游目的地</h3>
 			<ScrollCityList :cityList="dstCity" :listWidth="cityListWidth" @cityClick="handleCityClick"></ScrollCityList>
@@ -19,11 +18,7 @@
 		</div>
 		<div class="ware-show local">
 			<ShowTitle :titleName="'本地拍摄'" :moreLink="'/local'"></ShowTitle>
-			<div class="warelist-body">
-				<ul class="ware-list">
-					<li></li>
-				</ul>
-			</div>
+			<WareList v-if="localWareList.length !== 0" :wareData="localWareList"></WareList>
 		</div>
 		<div class="ware-show global">
 			<ShowTitle :titleName="'全球旅拍'"></ShowTitle>
@@ -50,15 +45,16 @@
 	export default {
 		data () {
 			return {
-				store: {},
 				providerId: '',
 				bannerList: [],
-				kindList: [],
+				navList: [],
 				dstCity: [],
 				recommendWare: [],
 				checkedIndex: 0,
+				localWareList: [],
 				globalWareList: [],
 				tripWareList: [],
+				cityCode: '',
 			}
 		},
 		components: {
@@ -71,6 +67,12 @@
 			ScrollCityList,
 		},
 		methods: {
+			showToast(msg) {
+				this.$toast({
+					message: msg,
+					duration: 1000,
+				})
+			},
 			getStore() {
 				findStoreByWapDoMain().then(res => {
 					console.log(res)
@@ -86,15 +88,19 @@
 				}
 				findmerchantStoreBystoreId(data).then(res => {
 					if(res.data.status === 1) {
-						this.store = res.data.data;
-						let merchantId = this.providerId = res.data.data.merchantId;
-						this.getBannerList(merchantId)
-						this.getKindList(merchantId)
-						this.getDstCity(merchantId)
-						let store = JSON.stringify(res.data.data);
-						sessionStorage.setItem('store', store)
+						let store = res.data.data;
+						document.title = store.storeName;
+						this.providerId = res.data.data.merchantId;
+						this.getBannerList(this.providerId)
+						this.getKindList(this.providerId)
+						this.getDstCity(this.providerId)
+						sessionStorage.setItem('store', JSON.stringify(store))
+						sessionStorage.setItem('providerId', this.providerId)
+						this.getLocalWareList()
 						this.getGlobalWareList()
 						this.getTripWareList()
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -108,8 +114,9 @@
 				bannermobilelist(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						console.log(res.data)
 						this.bannerList = res.data.data;
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -125,10 +132,16 @@
 				]
 				kindlist(data).then(res => {
 					if(res.data.status === 1) {
-						this.kindList = res.data.data;
-						this.kindList.forEach((kind, index) => {
+						this.navList = res.data.data;
+						this.navList.forEach((kind, index) => {
 							kind.imgSrc = kindImgSrc[index];
+							kind.href = '/ware/list?kindId=' + kind.id;
 						})
+						let _nav = JSON.stringify(this.navList);
+						this.navList[1] = JSON.parse(_nav)[3];
+						this.navList[3] =  JSON.parse(_nav)[1];
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -138,13 +151,18 @@
 				}
 				dstcity(data).then(res => {
 					if(res.data.status === 1) {
-						this.dstCity = res.data.data.reverse();
+						this.dstCity = res.data.data;
 						this.dstCity[0].checked = true;
-						this.getRecommentWareList(providerId, this.dstCity[0].dstCityCode)
+						this.cityCode = this.dstCity[0].dstCityCode;
+						this.getRecommentWareList(providerId, this.cityCode)
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
 			handleCityClick(cityCode) {
+				if(this.cityCode === cityCode) return;
+				this.cityCode = cityCode;
 				this.getRecommentWareList(this.providerId, cityCode)
 			},
 			getRecommentWareList(providerId, dstCityCode) {
@@ -155,6 +173,21 @@
 				recommendware(data).then(res => {
 					if(res.data.status === 1) {
 						this.recommendWare = res.data.data;
+					} else {
+						this.showToast(res.data.msg)
+					}
+				})
+			},
+			getLocalWareList() {
+				let data = {
+					providerId: this.providerId
+				}
+				locallist(data).then(res => {
+					console.log(res)
+					if(res.data.status === 1) {
+						console.log(res.data.data)
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -169,8 +202,9 @@
 				warelist(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						console.log(res.data.data)
 						this.globalWareList = res.data.data;
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -181,8 +215,9 @@
 				}
 				warelist(data).then(res => {
 					if(res.data.status === 1) {
-						console.log(res.data.data)
 						this.tripWareList = res.data.data;
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},

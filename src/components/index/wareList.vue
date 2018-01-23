@@ -1,7 +1,7 @@
 <template>
 	<ul class="ware-list">
 		<li v-for="ware in wareData" :index="ware.id" class="ware-item">
-			<router-link :to="'ware/detail?id='+ware.id">
+			<router-link :to="'/ware/detail?id='+ware.id">
 				<img v-lazy="ware.mainImg" class="ware-img">
 				<div class="ware-detail">
 					<h4 class="ware-name">{{ware.wareName}}</h4>
@@ -29,7 +29,7 @@
 		.ware-item {
 			padding-bottom: 10px;
 			margin-bottom: 20px;
-			border-bottom: 1px solid #ccc;
+			border-bottom: 1px solid #f0f0f0;
 			a {
 				display: flex;
 				color: #666;

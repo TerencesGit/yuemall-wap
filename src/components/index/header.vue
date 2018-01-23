@@ -17,9 +17,12 @@
 		data() {
 			return {
 				value: '搜索目的地',
+				store: {}
 			}
 		},
-		props: ['store'],
+		created() {
+			this.store = JSON.parse(sessionStorage.getItem('store'))
+		}
 	}
 </script>
 <style scoped lang="scss">

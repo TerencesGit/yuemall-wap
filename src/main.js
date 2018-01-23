@@ -9,8 +9,9 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+// import '@/assets/lib/mui/css/mui.min.css'
+// import '@/assets/lib/mui/css/icons-extra.css'
 import '@/assets/css/main.scss'
-
 Vue.use(Router)
 Vue.use(MintUI)
 Vue.directive('title', {

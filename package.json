@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "mint-ui": "^2.2.13",
+    "mui": "^0.0.1",
     "nprogress": "^0.2.0",
     "vue": "^2.5.13",
     "vue-router": "^2.8.1",

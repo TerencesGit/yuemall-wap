@@ -1,6 +1,5 @@
 <template>
 	<section>
-		<div v-title :data-title="$route.name"></div>
 		<div class="ware-swipe">
 			<mt-swipe :showIndicators="false">
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
@@ -42,18 +41,34 @@
 			<h3 class="attr-title">{{attributeName[item.title]}}</h3>
 			<div v-html="item.content" class="ware-attr"></div>
 		</div>
-		<!-- <FooterComp></FooterComp> -->
+		<div style="height: 50px;"></div>
+		<div class="fixed-footer">
+			<ul class="footer-bar">
+				<li class="collection" @click="handleCollect">
+					<a href="javascript:;">
+						<img src="http://wap.yueshijue.com/detail/image/shou01.png" alt="">
+						<p>收藏</p>
+					</a>
+				</li>
+				<li class="service">
+					<a href="javascript:;">
+						<img src="http://wap.yueshijue.com/detail/image/kefu.png" alt="">
+						<p>客服</p>
+					</a>
+				</li>
+				<li class="reserve">
+					<button class="reserve-button">开始预订</button>
+				</li>
+			</ul>
+		</div>
 	</section>
 </template>
 <script>
-	// import HeaederComp from '../components/header'
-	// import FooterComp from '../components/footer'
-	import { wareDetail, wareAttribut } from '@/api'
+	import { wareDetail, wareAttribut, createWareCollection, cancelWareCollection } from '@/api'
 	export default {
 		data () {
 			return {
-				store: {},
-				providerId: '',
+				wareId: '',
 				bannerList: [],
 				wareDetail: {},
 				wareAttribute: {},
@@ -81,11 +96,13 @@
 				keyWords: [],
 			}
 		},
-		components: {
-			// HeaederComp,
-			// FooterComp,
-		},
 		methods: {
+			showToast(msg) {
+				this.$toast({
+					message: msg,
+					duration: 1000,
+				})
+			},
 			getWareDetail(wareId) {
 				let data = {
 					id: wareId
@@ -98,6 +115,7 @@
 					if(res.data.status === 1) {
 						 console.log(res.data.data)
 						 this.wareDetail = res.data.data;
+						 document.title = this.wareDetail.wareName;
 						 this.keyWords = this.wareDetail.keyWords.split(',').splice(0,3);
 						 this.bannerList = this.wareDetail.wareImgInfos;
 					}
@@ -114,7 +132,6 @@
 					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.attrOrder.forEach(attr => {
-							console.log(attr)
 							let attrObj = {
 								title: attr,
 								content: res.data.data[attr]
@@ -126,12 +143,25 @@
 					}
 				})
 			},
+			handleCollect() {
+				let data = {
+					wareId: this.wareId
+				}
+				createWareCollection(data).then(res => {
+					console.log(res)
+					if(res.data.status === 1) {
+						this.showToast('收藏成功')
+					} else {
+						this.showToast(res.data.msg)
+					}
+				})
+			},
 		},
 		created() {
-			let wareId = this.$route.query.id;
-			if(wareId) {
-				this.getWareDetail(wareId)
-				this.getWareAttribute(wareId)
+			this.wareId = this.$route.query.id;
+			if(this.wareId) {
+				this.getWareDetail(this.wareId)
+				this.getWareAttribute(this.wareId)
 			}
 		}
 	}
@@ -212,6 +242,39 @@
 		.ware-attr {
 			padding: 5px 0 15px;
 			border-bottom: 1px solid #ccc;
+		}
+	}
+	.fixed-footer {
+		position: fixed;
+		bottom: 0;
+		z-index: 99;
+		width: 100%;
+		background: #fff;
+		.footer-bar {
+			display: flex;
+			height: 50px;
+			line-height: 50px;
+			li {
+				flex: 1;
+				text-align: center;
+				img {
+					width: 17px;
+					height: 19px;
+				}
+				p {
+					margin-top: -15px;
+					line-height: 1;
+				}
+			}
+			.reserve {
+				flex: 2;
+				.reserve-button {
+					width: 100%;
+					color: #fff;
+					font-size: 18px;
+					background: #f00;
+				}
+			}
 		}
 	}
 </style>
