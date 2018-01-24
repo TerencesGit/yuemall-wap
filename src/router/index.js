@@ -4,6 +4,7 @@ import Register from '@/pages/base/register'
 import Index from '@/pages/index'
 import WareDetail from '@/pages/ware/detail'
 import WareList from '@/pages/ware/list'
+import WareReserve from '@/pages/ware/reserve'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/ware/list',
     name: '商品列表页',
     component: WareList
+  },
+  {
+    path: '/ware/reserve',
+    name: '商品预定页',
+    component: WareReserve
   },
 ]
 export default routes

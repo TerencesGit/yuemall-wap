@@ -44,9 +44,10 @@
 		<div style="height: 50px;"></div>
 		<div class="fixed-footer">
 			<ul class="footer-bar">
-				<li class="collection" @click="handleCollect">
-					<a href="javascript:;">
-						<img src="http://wap.yueshijue.com/detail/image/shou01.png" alt="">
+				<li class="collection">
+					<a href="javascript:;" @click="handleCollect">
+						<!-- <img src="http://wap.yueshijue.com/detail/image/shou01.png" alt=""> -->
+						<img src="http://wap.yueshijue.com/detail/image/shou02.png" alt="">
 						<p>收藏</p>
 					</a>
 				</li>
@@ -57,7 +58,7 @@
 					</a>
 				</li>
 				<li class="reserve">
-					<button class="reserve-button">开始预订</button>
+					<button class="reserve-button" @click="handleReserve">开始预订</button>
 				</li>
 			</ul>
 		</div>
@@ -152,10 +153,14 @@
 					if(res.data.status === 1) {
 						this.showToast('收藏成功')
 					} else {
-						this.showToast(res.data.msg)
+						this.showToast('收藏失败')
 					}
 				})
 			},
+			handleReserve() {
+				console.log(this.wareId)
+				this.$router.push('/ware/reserve')
+			}
 		},
 		created() {
 			this.wareId = this.$route.query.id;
@@ -257,6 +262,11 @@
 			li {
 				flex: 1;
 				text-align: center;
+				a {
+					display: block;
+					width: 100%;
+					color: #666;
+				}
 				img {
 					width: 17px;
 					height: 19px;
