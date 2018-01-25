@@ -1,17 +1,80 @@
 <template>
 	<section>
+		<div v-title :data-title="$route.name"></div>
 		<div class="page-title">
 			<h3>选择日期和人数</h3>
 			<i class="square bg-red"></i>
 			<span>基础</span>
 		</div>
 		<div class="ware-price-calendar">
-			
+			<price-calendar 
+				:data="skuData"
+				:firstDayOfWeek="0"
+				:selectedDay="selectedDay"
+				@dayClick="dayClick"
+				@prevMonth="handlePrevMonth"
+				@nextMonth="handleNextMonth"
+				>
+			</price-calendar>
 		</div>
 	</section>
 </template>
 <script>
-	
+	import { wareSkuOfMonth } from '@/api'
+	export default {
+		data() {
+			return {
+				wareId: '',
+				skuDate: '',
+				selectedDay: '',
+				skuData: [],
+			}
+		},
+		methods: {
+			currentDate() {
+				let date = new Date();
+				let year = date.getFullYear(),
+						month = String(date.getMonth() + 1).replace(/^(\d)$/, '0$1'),
+						day = String(date.getDate()).replace(/^(\d)$/, '0$1');
+				return year + '-' + month + '-' + day;
+			},
+			dayClick(cell) {
+				if(cell.data) {
+					this.selectedDay = cell.date;
+				}
+			},
+			handlePrevMonth(date) {
+				this.skuDate = date;
+				this.getWareSkuData()
+			},
+			handleNextMonth(date) {
+				this.skuDate = date;
+				this.getWareSkuData()
+			},
+			getWareSkuData() {
+				let data = {
+					wareId: this.wareId,
+					skuDate: this.skuDate,
+				}
+				wareSkuOfMonth(data).then(res => {
+					if(res.data.status === 1) {
+						this.skuData = res.data.data;
+					} else {
+						this.$toast({
+							message: res.data.msg
+						})
+					}
+				}).catch(err => {
+					console.log(err)
+				})
+			}
+		},
+		created() {
+			this.wareId = this.$route.query.wareId;
+			this.skuDate = this.currentDate();
+			this.getWareSkuData()
+		}
+	}
 </script>
 <style scoped lang="scss">
 	.page-title {

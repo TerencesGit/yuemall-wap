@@ -159,7 +159,7 @@
 			},
 			handleReserve() {
 				console.log(this.wareId)
-				this.$router.push('/ware/reserve')
+				this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
 			}
 		},
 		created() {
