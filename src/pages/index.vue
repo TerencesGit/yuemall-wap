@@ -55,6 +55,10 @@
 				globalWareList: [],
 				tripWareList: [],
 				cityCode: '',
+				page: {
+					currentPage: 1,
+					paegSize: 10,
+				},
 			}
 		},
 		components: {
@@ -124,26 +128,47 @@
 				let data = {
 					providerId
 				}
-				let kindImgSrc = [
-					'http://wap.yueshijue.com/assets/img/gnsy.png',
-					'http://wap.yueshijue.com/assets/img/ly.png',
-					'http://wap.yueshijue.com/assets/img/qqlp.png',
-					'http://wap.yueshijue.com/assets/img/gwsy.png',
+				let _kindListOrder = [
+					{
+						id: 715060598102532,
+						kindName: '国内旅拍',
+						href: '/ware/list?kindId=715060598102532',
+						kindIco: 'http://wap.yueshijue.com/assets/img/gnsy.png',
+					},
+					{
+						id: 715060598613714,
+						kindName: '国外旅拍',
+						href: '/ware/list?kindId=715060598613714',
+						kindIco: 'http://wap.yueshijue.com/assets/img/gwsy.png',
+					},
+					{
+						id: 415057355555522,
+						kindName: '一价全包',
+						href: '/ware/list?kindId=415057355555522',
+						kindIco: 'http://wap.yueshijue.com/assets/img/qqlp.png',
+					},
+					{
+						id: 415057355808314,
+						kindName: '旅游',
+						href: '/ware/list?kindId=415057355808314',
+						kindIco: 'http://wap.yueshijue.com/assets/img/ly.png',
+					},
 				]
-				kindlist(data).then(res => {
-					if(res.data.status === 1) {
-						this.navList = res.data.data;
-						this.navList.forEach((kind, index) => {
-							kind.imgSrc = kindImgSrc[index];
-							kind.href = '/ware/list?kindId=' + kind.id;
-						})
-						let _nav = JSON.stringify(this.navList);
-						this.navList[1] = JSON.parse(_nav)[3];
-						this.navList[3] =  JSON.parse(_nav)[1];
-					} else {
-						this.showToast(res.data.msg)
-					}
-				})
+				this.navList = _kindListOrder;
+				// kindlist(data).then(res => {
+				// 	if(res.data.status === 1) {
+				// 		this.navList = res.data.data;
+				// 		this.navList.forEach((kind, index) => {
+				// 			kind.imgSrc = kindImgSrc[index];
+				// 			kind.href = '/ware/list?kindId=' + kind.id;
+				// 		})
+				// 		let _nav = JSON.stringify(this.navList);
+				// 		this.navList[1] = JSON.parse(_nav)[3];
+				// 		this.navList[3] = JSON.parse(_nav)[1];
+				// 	} else {
+				// 		this.showToast(res.data.msg)
+				// 	}
+				// })
 			},
 			getDstCity(providerId) {
 				let data = {
@@ -183,8 +208,8 @@
 					providerId: this.providerId
 				}
 				locallist(data).then(res => {
-					console.log(res)
 					if(res.data.status === 1) {
+						this.localWareList = res.data.data;
 						console.log(res.data.data)
 					} else {
 						this.showToast(res.data.msg)
@@ -198,11 +223,12 @@
 				let data = {
 					kindCode: 'tripphoto-TP',
 					providerId: this.providerId,
+					page: this.page,
 				}
 				warelist(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						this.globalWareList = res.data.data;
+						this.globalWareList = res.data.data.splice(0, 10);
 					} else {
 						this.showToast(res.data.msg)
 					}
@@ -215,7 +241,7 @@
 				}
 				warelist(data).then(res => {
 					if(res.data.status === 1) {
-						this.tripWareList = res.data.data;
+						this.tripWareList = res.data.data.splice(0, 10);
 					} else {
 						this.showToast(res.data.msg)
 					}

@@ -3,7 +3,7 @@
 		<ul class="nav-list">
 			<li v-for="navItem in navData" :index="navItem.id">
 				<router-link :to="navItem.href">
-					<img :src="navItem.imgSrc" alt="">
+					<img :src="navItem.kindIco" alt="">
 					<span>{{navItem.kindName}}</span>
 				</router-link>
 			</li>
