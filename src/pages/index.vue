@@ -33,13 +33,13 @@
 	</section>
 </template>
 <script>
-	import HeaederComp from '../components/index/header'
-	import FooterComp from '../components/index/footer'
-	import Navbar from '../components/index/navbar'
-	import ScrollCityList from '../components/index/cityList'
-	import ShowTitle from '../components/index/listTitle'
-	import WareList from '../components/index/wareList'
-	import WareHorizontalList from '../components/index/wareHorizontalList'
+	import HeaederComp from './components/index/header'
+	import FooterComp from './components/index/footer'
+	import Navbar from './components/index/navbar'
+	import ScrollCityList from './components/index/cityList'
+	import ShowTitle from './components/index/listTitle'
+	import WareList from './components/index/wareList'
+	import WareHorizontalList from './components/index/wareHorizontalList'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
 	export default {

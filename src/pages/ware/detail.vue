@@ -25,7 +25,7 @@
 			<div class="detail-item feature">
 				<label class="features">行程特色：</label>
 				<ul class="feature-list">
-					<li v-for="(keyword, index) in keyWords" :index="index">{{keyword}}</li>
+					<li v-for="(keyword, index) in keyWords" :key="index">{{keyword}}</li>
 				</ul>
 			</div>
 			<div class="detail-item">
@@ -37,7 +37,7 @@
 			<h3 class="attr-title">店长推荐</h3>
 			<div v-html="wareDetail.wareDesc"></div>
 		</div>
-		<div class="detail-section" v-for="(item, index) in attributeList">
+		<div class="detail-section" v-for="(item, index) in attributeList" :key="index">
 			<h3 class="attr-title">{{attributeName[item.title]}}</h3>
 			<div v-html="item.content" class="ware-attr"></div>
 		</div>

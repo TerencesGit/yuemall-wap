@@ -33,8 +33,8 @@
 
 <script>
   import { findDstList, findWareListByKind } from '@/api'
-  import SearchHeader from "@/components/warelist/header"
-  import WareList from "@/components/index/wareList"
+  import SearchHeader from "../components/warelist/header"
+  import WareList from "../components/index/wareList"
   export default {
     components:{
       SearchHeader,

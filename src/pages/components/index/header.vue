@@ -1,5 +1,5 @@
 <template>
-	<header class="header">
+	<header class="index-header">
 		<div class="logo">
 			<img :src="store.storeLogo" alt="">
 		</div>
@@ -8,7 +8,6 @@
 				<i class="mintui mintui-search"></i>
 				<input type="search" placeholder="搜索目的地" class="mint-searchbar-core">
 			</div>
-			<!-- <mt-search v-model="value" :result.sync="result"></mt-search> -->
 		</div>
 	</header>
 </template>
@@ -26,7 +25,7 @@
 	}
 </script>
 <style scoped lang="scss">
-	.header {
+	.index-header {
 		display: flex;
 		padding: 5px 15px;
 		.logo {
@@ -42,12 +41,12 @@
 				display: flex;
 				flex: 1;
 				height: 28px;
-    		padding: 4px 6px;
-    		background: #fff;
-    		border-radius: 15px;
-    		.mintui-search {
-    			margin: 2px 5px 0 0;
-    		}
+				padding: 4px 6px;
+				background: #fff;
+				border-radius: 15px;
+				.mintui-search {
+					margin: 2px 5px 0 0;
+				}
 			}
 		}
 	}

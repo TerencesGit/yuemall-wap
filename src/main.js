@@ -10,6 +10,7 @@ import 'mint-ui/lib/style.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import '@/assets/css/main.scss'
+import '@/assets/css/theme/default.scss'
 import Calendar from './components/calendar'
 Vue.use(Router)
 Vue.use(MintUI)
