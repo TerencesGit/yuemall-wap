@@ -1,12 +1,12 @@
 <template>
 	<ul class="ware-list">
-		<li v-for="ware in wareData" :index="ware.id" class="ware-item">
+		<li v-for="ware in wareData" :key="ware.id" class="ware-item">
 			<router-link :to="'/ware/detail?id='+ware.id">
 				<img v-lazy="ware.mainImg" class="ware-img">
 				<div class="ware-detail">
 					<h4 class="ware-name">{{ware.wareName}}</h4>
 					<ul class="ware-keywords clearfix">
-						<li v-for="item in ware.keyWords.split(',')">{{item}}</li>
+						<li v-for="(item, index) in ware.keyWords.split(',')" :key="index">{{item}}</li>
 					</ul>
 					<p class="price text-price">
 						<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>

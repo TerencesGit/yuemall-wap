@@ -29,7 +29,8 @@
 		</div>
 		<div class="ware-show global">
 			<ShowTitle :titleName="'全球旅拍'"></ShowTitle>
-			<WareList :wareData="globalWareList"></WareList>
+			<!-- <WareList :wareData="globalWareList"></WareList> -->
+			<WareShow :wareData="globalWareList"></WareShow>
 		</div>
 		<div class="ware-show travel">
 			<ShowTitle :titleName="'旅游线路'"></ShowTitle>
@@ -47,6 +48,7 @@
 	import ShowTitle from './components/index/listTitle'
 	import WareList from './components/index/wareList'
 	import WareKinds from './components/index/wareKind'
+	import WareShow from './components/wareShow.vue'
 	import WareHorizontalList from './components/index/wareHorizontalList'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
@@ -77,6 +79,7 @@
 			Navbar,
 			ShowTitle,
 			WareList,
+			WareShow,
 			WareKinds,
 			WareHorizontalList,
 			ScrollCityList,
