@@ -1,16 +1,23 @@
 <template>
 	<section>
 		<HeaederComp></HeaederComp>
-		<mt-swipe style="height: 172px;">
+		<mt-swipe :style="{height: bannerHeight}">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 				<router-link to="/">
 		      <img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
 		    </router-link>
 			</mt-swipe-item>
 		</mt-swipe>
-		<Navbar :navData="navList"></Navbar>
+		<!-- <Navbar :navData="navList"></Navbar> -->
+		<WareKinds :warekinds="warekinds"></WareKinds>
 		<div class="global-city">
-			<h3 class="global-title">全球100+旅游目的地</h3>
+			<div class="title">
+				<h3 class="global-title">
+					<span>全球100+</span>
+					<span>目的地</span>
+				</h3>
+				<h4 class="text-center uppercase">global 100+ destination</h4>
+			</div>
 			<ScrollCityList :cityList="dstCity" :listWidth="cityListWidth" @cityClick="handleCityClick"></ScrollCityList>
 			<div class="global-city-list">
 				<WareHorizontalList :wareData="recommendWare" :listWidth="recommendListWidth"></WareHorizontalList>
@@ -39,6 +46,7 @@
 	import ScrollCityList from './components/index/cityList'
 	import ShowTitle from './components/index/listTitle'
 	import WareList from './components/index/wareList'
+	import WareKinds from './components/index/wareKind'
 	import WareHorizontalList from './components/index/wareHorizontalList'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
@@ -59,6 +67,8 @@
 					currentPage: 1,
 					paegSize: 10,
 				},
+				bannerHeight: '172px',
+				warekinds: [],
 			}
 		},
 		components: {
@@ -67,6 +77,7 @@
 			Navbar,
 			ShowTitle,
 			WareList,
+			WareKinds,
 			WareHorizontalList,
 			ScrollCityList,
 		},
@@ -133,28 +144,34 @@
 						id: 715060598102532,
 						kindName: '国内旅拍',
 						href: '/ware/list?kindId=715060598102532',
-						kindIco: 'http://wap.yueshijue.com/assets/img/gnsy.png',
+						imgSrc: '/static/image/warekind1.jpg',
 					},
 					{
 						id: 715060598613714,
 						kindName: '国外旅拍',
 						href: '/ware/list?kindId=715060598613714',
-						kindIco: 'http://wap.yueshijue.com/assets/img/gwsy.png',
+						imgSrc: '/static/image/warekind2.jpg',
 					},
+					// {
+					// 	id: 415057355555522,
+					// 	kindName: '一价全包',
+					// 	href: '/ware/list?kindId=415057355555522',
+					// 	imgSrc: '/static/image/warekind3.jpg',
+					// },
 					{
-						id: 415057355555522,
-						kindName: '一价全包',
-						href: '/ware/list?kindId=415057355555522',
-						kindIco: 'http://wap.yueshijue.com/assets/img/qqlp.png',
+						id: 415193834363537,
+						kindName: '本地拍',
+						href: '/ware/list?kindId=415193834363537',
+						imgSrc: '/static/image/warekind3.jpg',
 					},
 					{
 						id: 415057355808314,
 						kindName: '旅游',
 						href: '/ware/list?kindId=415057355808314',
-						kindIco: 'http://wap.yueshijue.com/assets/img/ly.png',
+						imgSrc: '/static/image/warekind4.jpg',
 					},
 				]
-				this.navList = _kindListOrder;
+				this.warekinds = _kindListOrder;
 				// kindlist(data).then(res => {
 				// 	if(res.data.status === 1) {
 				// 		this.navList = res.data.data;
@@ -256,12 +273,19 @@
 				return this.recommendWare.length * 170 + 'px';
 			}
 		},
+		mounted() {
+			this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			window.onresize = () => {
+				this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			}
+		},
 		created() {
 			this.getStore()
 		} 
 	}
 </script>
 <style scoped lang="scss">
+	$color1: #00aaef;
 	.mint-swipe {
 		img {
 			display: block;
@@ -272,11 +296,24 @@
 	.global-city {
 		margin-top: 10px;
 		background: #fff;
-		.global-title {
-			text-align: center;
-			font-weight: normal;
-			padding: 10px 0;
+		.title {
+			margin: 10px 0;
+			.global-title {
+				font-size: 18px;
+				text-align: center;
+				padding-top: 10px;
+				span {
+					&:first-child {
+						color: $color1;
+					}
+				}
+			}
+			h4 {
+				color: #999;
+				font-weight: normal;
+			}
 		}
+		
 		.global-city-list {
 			width: 100%;
 			overflow-x: scroll;
