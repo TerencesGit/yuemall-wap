@@ -24,19 +24,24 @@
 			</div>
 		</div>
 		<div class="ware-show local">
-			<ShowTitle :titleName="'本地拍摄'" :moreLink="'/local'"></ShowTitle>
-			<WareList v-if="localWareList.length !== 0" :wareData="localWareList"></WareList>
+			<!-- <ShowTitle :titleName="'本地拍摄'" :moreLink="'/local'"></ShowTitle> -->
+			<!-- <WareList v-if="localWareList.length !== 0" :wareData="localWareList"></WareList> -->
+			<WarekindHead :warekind="warekindObj.local"></WarekindHead>
+			<WareShow :wareData="localWareList"></WareShow>
 		</div>
 		<div class="ware-show global">
-			<ShowTitle :titleName="'全球旅拍'"></ShowTitle>
+			<!-- <ShowTitle :titleName="'全球旅拍'"></ShowTitle> -->
 			<!-- <WareList :wareData="globalWareList"></WareList> -->
+			<WarekindHead :warekind="warekindObj.global"></WarekindHead>
 			<WareShow :wareData="globalWareList"></WareShow>
 		</div>
 		<div class="ware-show travel">
-			<ShowTitle :titleName="'旅游线路'"></ShowTitle>
-			<WareList :wareData="tripWareList"></WareList>
+			<!-- <ShowTitle :titleName="'旅游线路'"></ShowTitle> -->
+			<!-- <WareList :wareData="tripWareList"></WareList> -->
+			<WarekindHead :warekind="warekindObj.tourism"></WarekindHead>
+			<WareShow :wareData="tripWareList"></WareShow>
 		</div>
-		<div style="height: 30px;"></div>
+		<div style="height: 60px;"></div>
 		<FooterComp></FooterComp>
 	</section>
 </template>
@@ -49,6 +54,7 @@
 	import WareList from './components/index/wareList'
 	import WareKinds from './components/index/wareKind'
 	import WareShow from './components/wareShow.vue'
+	import WarekindHead from './components/index/warekindHead.vue'
 	import WareHorizontalList from './components/index/wareHorizontalList'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
@@ -71,6 +77,23 @@
 				},
 				bannerHeight: '172px',
 				warekinds: [],
+				warekindObj: {
+					local: {
+						name: '本地拍摄',
+						subTitle: 'local photo',
+						moreUrl: '/local',
+					},
+					global: {
+						name: '全球旅拍',
+						subTitle: 'global photo',
+						moreUrl: '/global',
+					},
+					tourism: {
+						name: '旅游线路',
+						subTitle: 'tourism',
+						moreUrl: '/tourism',
+					}
+				}
 			}
 		},
 		components: {
@@ -81,6 +104,7 @@
 			WareList,
 			WareShow,
 			WareKinds,
+			WarekindHead,
 			WareHorizontalList,
 			ScrollCityList,
 		},
@@ -93,7 +117,6 @@
 			},
 			getStore() {
 				findStoreByWapDoMain().then(res => {
-					console.log(res)
 					if(res.data.status === 1) {
 						let storeId = res.data.data;
 						this.getMerchantStore(storeId)
@@ -230,7 +253,7 @@
 				locallist(data).then(res => {
 					if(res.data.status === 1) {
 						this.localWareList = res.data.data;
-						console.log(res.data.data)
+						// console.log(res.data.data)
 					} else {
 						this.showToast(res.data.msg)
 					}

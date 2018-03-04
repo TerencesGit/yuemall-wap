@@ -1,5 +1,5 @@
 <template>
-  <div class="ware-show">
+  <div class="ware-list-wrap">
       <ul class="ware-list">
           <li v-for="(item, index) in wareData" :key="index">
               <router-link :to="'/ware/detail?id='+item.id">
@@ -17,15 +17,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .ware-show {
+    .ware-list-wrap {
         padding: 10px;
     }
     .ware-list {
         display: flex;
         flex-wrap: wrap;
+        margin-top: 10px;
         li {
             width: 50%;
-            padding: 5px 5px 0;
+            padding: 0 5px;
+            margin-bottom: 10px;
             img {
                 display: block;
             }
