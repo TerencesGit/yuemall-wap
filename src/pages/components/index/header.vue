@@ -1,7 +1,7 @@
 <template>
 	<header class="index-header">
-		<div class="logo">
-			<img :src="store.storeLogo" alt="">
+		<div class="site-logo">
+			<img :src="storeLogo" class="logo">
 		</div>
 		<div class="searchbar">
 			<div class="searchbar-inner">
@@ -13,39 +13,43 @@
 </template>
 <script>
 	export default {
+		name: 'IndexHeader',
+		props: ['storeLogo'],
 		data() {
 			return {
 				value: '搜索目的地',
-				store: {}
 			}
 		},
-		created() {
-			this.store = JSON.parse(sessionStorage.getItem('store'))
-		}
+		methods: {
+		},
 	}
 </script>
 <style scoped lang="scss">
 	.index-header {
 		display: flex;
-		padding: 5px 15px;
-		.logo {
+		width: 100%;
+		height: 56px;
+		padding: 10px 15px;
+		.site-logo {
 			width: 100px;
-			img {
+			height: 32px;
+			margin-right: 20px;
+			.logo {
 				width: 100%;
+				height: 100%;
 			}
 		}
 		.searchbar {
 			flex: 1;
-			margin: 5px 0  0 10px;
 			.searchbar-inner {
 				display: flex;
 				flex: 1;
-				height: 28px;
+				height: 32px;
 				padding: 4px 6px;
 				background: #fff;
 				border-radius: 15px;
 				.mintui-search {
-					margin: 2px 5px 0 0;
+					margin: 5px 10px 0 0;
 				}
 			}
 		}

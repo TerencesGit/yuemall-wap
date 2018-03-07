@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<HeaederComp></HeaederComp>
+		<HeaederComp :storeLogo="storeLogo"></HeaederComp>
 		<mt-swipe :style="{height: bannerHeight}">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 				<router-link to="/">
@@ -51,7 +51,7 @@
 	import Navbar from './components/index/navbar'
 	import ScrollCityList from './components/index/cityList'
 	import ShowTitle from './components/index/listTitle'
-	import WareList from './components/index/wareList'
+	import WareList from  './components/index/wareList'
 	import WareKinds from './components/index/wareKind'
 	import WareShow from './components/wareShow.vue'
 	import WarekindHead from './components/index/warekindHead.vue'
@@ -61,7 +61,8 @@
 	export default {
 		data () {
 			return {
-				providerId: '',
+				storeId: '',
+				storeLogo: '',
 				bannerList: [],
 				navList: [],
 				dstCity: [],
@@ -131,12 +132,13 @@
 					if(res.data.status === 1) {
 						let store = res.data.data;
 						document.title = store.storeName;
-						this.providerId = res.data.data.merchantId;
-						this.getBannerList(this.providerId)
-						this.getKindList(this.providerId)
-						this.getDstCity(this.providerId)
-						sessionStorage.setItem('store', JSON.stringify(store))
-						sessionStorage.setItem('providerId', this.providerId)
+						this.storeId = store.merchantId;
+						this.storeLogo = store.storeLogo;
+						this.getBannerList(this.storeId)
+						this.getKindList(this.storeId)
+						this.getDstCity(this.storeId)
+						// sessionStorage.setItem('store', JSON.stringify(store))
+						sessionStorage.setItem('storeId', this.storeId)
 						this.getLocalWareList()
 						this.getGlobalWareList()
 						this.getTripWareList()
@@ -161,9 +163,9 @@
 					}
 				})
 			},
-			getKindList(providerId) {
+			getKindList(storeId) {
 				let data = {
-					providerId
+					storeId
 				}
 				let _kindListOrder = [
 					{
@@ -213,16 +215,16 @@
 				// 	}
 				// })
 			},
-			getDstCity(providerId) {
+			getDstCity(storeId) {
 				let data = {
-					providerId
+					providerId: storeId
 				}
 				dstcity(data).then(res => {
 					if(res.data.status === 1) {
 						this.dstCity = res.data.data;
 						this.dstCity[0].checked = true;
 						this.cityCode = this.dstCity[0].dstCityCode;
-						this.getRecommentWareList(providerId, this.cityCode)
+						this.getRecommentWareList(storeId, this.cityCode)
 					} else {
 						this.showToast(res.data.msg)
 					}
@@ -231,11 +233,11 @@
 			handleCityClick(cityCode) {
 				if(this.cityCode === cityCode) return;
 				this.cityCode = cityCode;
-				this.getRecommentWareList(this.providerId, cityCode)
+				this.getRecommentWareList(this.storeId, cityCode)
 			},
-			getRecommentWareList(providerId, dstCityCode) {
+			getRecommentWareList(storeId, dstCityCode) {
 				let data = {
-					providerId,
+					providerId: storeId,
 					dstCityCode
 				}
 				recommendware(data).then(res => {
@@ -248,7 +250,7 @@
 			},
 			getLocalWareList() {
 				let data = {
-					providerId: this.providerId
+					providerId: this.storeId
 				}
 				locallist(data).then(res => {
 					if(res.data.status === 1) {
@@ -265,7 +267,7 @@
 				})
 				let data = {
 					kindCode: 'tripphoto-TP',
-					providerId: this.providerId,
+					providerId: this.storeId,
 					page: this.page,
 				}
 				warelist(data).then(res => {
@@ -280,7 +282,7 @@
 			getTripWareList() {
 				let data = {
 					kindCode: 'trip-T',
-					providerId: this.providerId,
+					providerId: this.storeId,
 				}
 				warelist(data).then(res => {
 					if(res.data.status === 1) {
@@ -293,7 +295,7 @@
 		},
 		computed: {
 			cityListWidth() {
-				return this.dstCity.length * 80 + 'px';
+				return this.dstCity.length * 90 + 'px';
 			},
 			recommendListWidth() {
 				return this.recommendWare.length * 170 + 'px';
@@ -311,7 +313,7 @@
 	}
 </script>
 <style scoped lang="scss">
-	$color1: #00aaef;
+	$color1: #00A1E5;
 	.mint-swipe {
 		img {
 			display: block;
@@ -325,9 +327,10 @@
 		.title {
 			margin: 10px 0;
 			.global-title {
-				font-size: 18px;
+				font-size: 22px;
 				text-align: center;
 				padding-top: 10px;
+				margin-bottom: 5px;
 				span {
 					&:first-child {
 						color: $color1;
@@ -335,11 +338,11 @@
 				}
 			}
 			h4 {
-				color: #999;
+				color: #333;
+				font-size: 12px;
 				font-weight: normal;
 			}
 		}
-		
 		.global-city-list {
 			width: 100%;
 			overflow-x: scroll;
