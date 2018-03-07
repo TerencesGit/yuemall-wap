@@ -1,6 +1,6 @@
 <template>
 	<ul class="ware-list clearfix" :style="{width: listWidth}">
-		<li v-for="ware in wareData" class="ware-item">
+		<li v-for="(ware, index) in wareData" class="ware-item" :key="index">
 			<router-link :to="'ware/detail?id='+ware.id">
 				<img :src="ware.mainImg" alt="">
 				<div class="ware-detail">

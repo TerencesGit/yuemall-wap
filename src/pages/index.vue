@@ -19,9 +19,12 @@
 				<h4 class="text-center uppercase">global 100+ destination</h4>
 			</div>
 			<ScrollCityList :cityList="dstCity" :listWidth="cityListWidth" @cityClick="handleCityClick"></ScrollCityList>
-			<div class="global-city-list">
+			<ScrollList :scrollWidth="recommendListWidth">
+				<WareItem v-for="(ware, index) in recommendWare" :key="index" :ware="ware" :wareWidth="150"></WareItem>
+			</ScrollList>
+			<!-- <div class="global-city-list" :style="{width: recommendListWidth}">
 				<WareHorizontalList :wareData="recommendWare" :listWidth="recommendListWidth"></WareHorizontalList>
-			</div>
+			</div> -->
 		</div>
 		<div class="ware-show local">
 			<!-- <ShowTitle :titleName="'本地拍摄'" :moreLink="'/local'"></ShowTitle> -->
@@ -56,6 +59,8 @@
 	import WareShow from './components/wareShow.vue'
 	import WarekindHead from './components/index/warekindHead.vue'
 	import WareHorizontalList from './components/index/wareHorizontalList'
+	import ScrollList from './components/index/scrollList'
+	import WareItem from './components/wareItem.vue'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
 					 recommendware, locallist, warelist } from '@/api'
 	export default {
@@ -108,6 +113,8 @@
 			WarekindHead,
 			WareHorizontalList,
 			ScrollCityList,
+			WareItem,
+			ScrollList,
 		},
 		methods: {
 			showToast(msg) {
@@ -298,7 +305,7 @@
 				return this.dstCity.length * 90 + 'px';
 			},
 			recommendListWidth() {
-				return this.recommendWare.length * 170 + 'px';
+				return this.recommendWare.length * 160 + 'px';
 			}
 		},
 		mounted() {
@@ -344,6 +351,7 @@
 			}
 		}
 		.global-city-list {
+			display: flex;
 			width: 100%;
 			overflow-x: scroll;
 			.ware-list {
