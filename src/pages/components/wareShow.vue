@@ -32,9 +32,9 @@ export default {
                 display: block;
             }
             p {
-                padding: 2px 2px 2px 5px;
-                line-height: 1;
+                padding: 3px 0 3px 5px;
                 color: #fff;
+                font-size: 16px;
                 background: #000;
             }
         }

@@ -5,7 +5,7 @@
     </h3>
     <h4 class="warekind-subtitle">{{warekind.subTitle}}</h4>
     <div class="link">
-      <router-link to="/" class="more-link">更多>></router-link>
+      <router-link to="/" class="more-link">更多></router-link>
     </div>
   </div>
 </template>
@@ -23,12 +23,9 @@ export default {
     .warekind-title {
       margin: 5px auto;
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       .title1 {
         color: $color1;
-      }
-      .title2 {
-
       }
     }
     .warekind-subtitle {
@@ -42,7 +39,7 @@ export default {
       right: 0;
       bottom: 10px;
       .more-link {
-        margin-right: 10px;
+        margin-right: 15px;
         padding: 3px 6px;
         color: #fff;
         font-size: 14px;

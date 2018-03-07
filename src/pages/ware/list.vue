@@ -1,15 +1,15 @@
 <template>
   <section>
     <SearchHeader></SearchHeader>
-    <mt-swipe style="height: 180px;">
-      <mt-swipe-item>
-        <img src="http://wap.yueshijue.com/warp/assets/image/sb.png">
+    <mt-swipe :style="{height: bannerHeight}">
+      <mt-swipe-item v-for="(item, index) in bannerList" :key="index">
+        <img :src="item">
       </mt-swipe-item>
     </mt-swipe>
     <div class="hot-wrap bg-white">
       <div class="hot-title">
-        <em class="uppercase text-red">HOT</em>
-        <span class="text-blue">最热门</span>
+        <em class="uppercase">HOT</em>
+        <span>最热门</span>
       </div>
       <div class="hot-city">
         <ul class="city-list clearfix">
@@ -42,11 +42,16 @@
     },
     data() {
       return {
-        providerId: '',
+        storeId: '',
         wareKind: '',
         dstCityCode: '',
         dstCityList: [],
         wareList: [],
+        bannerHeight: '180px',
+        bannerList: [
+          'http://ums.yueshijue.com/UmsUpload/resource/201803/F51206197BB24A75AC382A0ED393D7EE_1520414112793.jpg',
+          'http://ums.yueshijue.com/UmsUpload/resource/201803/C724A039E6324DFC929D8FCEDD6A574F_1520413574591.jpg',
+        ]
       }
     },
     methods: {
@@ -58,7 +63,7 @@
       },
       getDstCityList() {
         let data = {
-          providerId: this.providerId,
+          providerId: this.storeId,
         }
         findDstList(data).then(res => {
           if(res.data.status === 1) {
@@ -84,7 +89,7 @@
       },
       getWareList() {
         let data = {
-          providerId: this.providerId,
+          providerId: this.storeId,
           wareKind: this.wareKind,
           dstCityCode: this.dstCityCode,
         }
@@ -97,8 +102,14 @@
         })
       },
     },
+    mounted() {
+      this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			window.onresize = () => {
+				this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			}
+    },
     created() {
-      this.providerId = sessionStorage.getItem('providerId');
+      this.storeId = sessionStorage.getItem('storeId');
       this.wareKind = this.$route.query.kindId;
       this.getDstCityList()
       this.getWareList()
@@ -109,10 +120,14 @@
 <style lang="scss" scoped>
   .hot-title {
     padding: 10px 15px;
-    font-size: 16px;
+    font-size: 14px;
     border-bottom: 1px solid #f0f0f0;
     em {
+      color: #f00;
       font-weight: bold;
+    }
+    span {
+      color: #00AAEF;
     }
   }
   .city-list {

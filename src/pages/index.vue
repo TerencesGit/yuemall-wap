@@ -3,9 +3,9 @@
 		<HeaederComp :storeLogo="storeLogo"></HeaederComp>
 		<mt-swipe :style="{height: bannerHeight}">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
-				<router-link to="/">
-		      <img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
-		    </router-link>
+				<router-link :to="'/ware/detail?id='+item.linkAddr.split('=')[1]">
+					<img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
+				</router-link>
 			</mt-swipe-item>
 		</mt-swipe>
 		<!-- <Navbar :navData="navList"></Navbar> -->
@@ -58,7 +58,6 @@
 	import WareKinds from './components/index/wareKind'
 	import WareShow from './components/wareShow.vue'
 	import WarekindHead from './components/index/warekindHead.vue'
-	import WareHorizontalList from './components/index/wareHorizontalList'
 	import ScrollList from './components/index/scrollList'
 	import WareItem from './components/wareItem.vue'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
@@ -111,7 +110,6 @@
 			WareShow,
 			WareKinds,
 			WarekindHead,
-			WareHorizontalList,
 			ScrollCityList,
 			WareItem,
 			ScrollList,

@@ -46,14 +46,18 @@
 			display: none;
 		}
 		.dstcity-list {
-			border-top: 1px solid #ccc;
-			border-bottom: 1px solid #ccc;
+			// padding-left: 10px;
+			// border-top: 1px solid #ccc;
+			// border-bottom: 1px solid #ccc;
 			li {
 				float: left;
 				width: 90px;
 				padding: 8px 0;
 				margin: 0 5px;
 				text-align: center;
+				&:first-child {
+					margin-left: 0;
+				}
 				&:last-child {
 					a {
 						border-right: 0;
