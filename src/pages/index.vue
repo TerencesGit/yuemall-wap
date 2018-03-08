@@ -61,7 +61,7 @@
 	import ScrollList from './components/index/scrollList'
 	import WareItem from './components/wareItem.vue'
 	import { findStoreByWapDoMain, findmerchantStoreBystoreId, bannermobilelist, kindlist, dstcity,
-					 recommendware, locallist, warelist } from '@/api'
+					 recommendware, locallist, warelist, findWareListByKind } from '@/api'
 	export default {
 		data () {
 			return {
@@ -86,17 +86,17 @@
 					local: {
 						name: '本地拍摄',
 						subTitle: 'local photo',
-						moreUrl: '/local',
+						moreUrl: '/ware/list?kindId=415193834363537',
 					},
 					global: {
 						name: '全球旅拍',
 						subTitle: 'global photo',
-						moreUrl: '/global',
+						moreUrl: '/ware/list?kindId=415057355555522',
 					},
 					tourism: {
 						name: '旅游线路',
 						subTitle: 'tourism',
-						moreUrl: '/tourism',
+						moreUrl: '/ware/list?kindId=415057355808314',
 					}
 				}
 			}
@@ -179,18 +179,18 @@
 						href: '/ware/list?kindId=715060598102532',
 						imgSrc: '/static/image/warekind1.jpg',
 					},
+					// {
+					// 	id: 715060598613714,
+					// 	kindName: '国外旅拍',
+					// 	href: '/ware/list?kindId=715060598613714',
+					// 	imgSrc: '/static/image/warekind2.jpg',
+					// },
 					{
-						id: 715060598613714,
-						kindName: '国外旅拍',
-						href: '/ware/list?kindId=715060598613714',
+						id: 415057355555522,
+						kindName: '全球旅拍',
+						href: '/ware/list?kindId=415057355555522',
 						imgSrc: '/static/image/warekind2.jpg',
 					},
-					// {
-					// 	id: 415057355555522,
-					// 	kindName: '一价全包',
-					// 	href: '/ware/list?kindId=415057355555522',
-					// 	imgSrc: '/static/image/warekind3.jpg',
-					// },
 					{
 						id: 415193834363537,
 						kindName: '本地拍',
@@ -205,20 +205,20 @@
 					},
 				]
 				this.warekinds = _kindListOrder;
-				// kindlist(data).then(res => {
-				// 	if(res.data.status === 1) {
-				// 		this.navList = res.data.data;
-				// 		this.navList.forEach((kind, index) => {
-				// 			kind.imgSrc = kindImgSrc[index];
-				// 			kind.href = '/ware/list?kindId=' + kind.id;
-				// 		})
-				// 		let _nav = JSON.stringify(this.navList);
-				// 		this.navList[1] = JSON.parse(_nav)[3];
-				// 		this.navList[3] = JSON.parse(_nav)[1];
-				// 	} else {
-				// 		this.showToast(res.data.msg)
-				// 	}
-				// })
+				kindlist(data).then(res => {
+					if(res.data.status === 1) {
+						this.navList = res.data.data;
+						this.navList.forEach((kind, index) => {
+							kind.imgSrc = kindImgSrc[index];
+							kind.href = '/ware/list?kindId=' + kind.id;
+						})
+						let _nav = JSON.stringify(this.navList);
+						this.navList[1] = JSON.parse(_nav)[3];
+						this.navList[3] = JSON.parse(_nav)[1];
+					} else {
+						this.showToast(res.data.msg)
+					}
+				})
 			},
 			getDstCity(storeId) {
 				let data = {
@@ -255,11 +255,14 @@
 			},
 			getLocalWareList() {
 				let data = {
-					providerId: this.storeId
+					providerId: this.storeId,
+					wareKind: 415193834363537,
+					dstCityCode: '',
+					page: this.page,
 				}
-				locallist(data).then(res => {
+				findWareListByKind(data).then(res => {
 					if(res.data.status === 1) {
-						this.localWareList = res.data.data;
+						this.localWareList = res.data.data.wares;
 						// console.log(res.data.data)
 					} else {
 						this.showToast(res.data.msg)
@@ -271,14 +274,15 @@
 				  spinnerType: 'snake'
 				})
 				let data = {
-					kindCode: 'tripphoto-TP',
 					providerId: this.storeId,
+					wareKind: 415057355555522,
+					dstCityCode: '',
 					page: this.page,
 				}
-				warelist(data).then(res => {
+				findWareListByKind(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						this.globalWareList = res.data.data.splice(0, 10);
+						this.globalWareList = res.data.data.wares;
 					} else {
 						this.showToast(res.data.msg)
 					}
@@ -286,12 +290,14 @@
 			},
 			getTripWareList() {
 				let data = {
-					kindCode: 'trip-T',
 					providerId: this.storeId,
+					wareKind: 415057355808314,
+					dstCityCode: '',
+					page: this.page,
 				}
-				warelist(data).then(res => {
+				findWareListByKind(data).then(res => {
 					if(res.data.status === 1) {
-						this.tripWareList = res.data.data.splice(0, 10);
+						this.tripWareList = res.data.data.wares;
 					} else {
 						this.showToast(res.data.msg)
 					}

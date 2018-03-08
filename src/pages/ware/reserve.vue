@@ -7,15 +7,17 @@
 			<span>基础</span>
 		</div>
 		<div class="ware-price-calendar">
-			<price-calendar 
+			<!-- <price-calendar 
 				:data="skuData"
 				:firstDayOfWeek="0"
+				:endDate="endDate"
+				:headerBg="calendarBg"
 				:selectedDay="selectedDay"
 				@dayClick="dayClick"
 				@prevMonth="handlePrevMonth"
 				@nextMonth="handleNextMonth"
 				>
-			</price-calendar>
+			</price-calendar> -->
 		</div>
 	</section>
 </template>
@@ -28,6 +30,8 @@
 				skuDate: '',
 				selectedDay: '',
 				skuData: [],
+				endDate: '',
+				calendarBg: 'rgb(0, 161, 229)',
 			}
 		},
 		methods: {
@@ -58,7 +62,8 @@
 				}
 				wareSkuOfMonth(data).then(res => {
 					if(res.data.status === 1) {
-						this.skuData = res.data.data;
+						this.skuData = res.data.data.currentMonthSku;
+						this.endDate = res.data.data.sellSkuPeriod.maxDate;
 					} else {
 						this.$toast({
 							message: res.data.msg

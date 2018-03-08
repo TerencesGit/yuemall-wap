@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import { findDstList, findWareListByKind } from '@/api'
   import SearchHeader from "../components/warelist/header"
   import WareList from "../components/index/wareList"
@@ -78,10 +79,21 @@
               this.dstCityList = dstCities.filter(dst => dst.mergerName)
             } else {
               this.dstCityList = dstCities.filter(dst => !dst.mergerName);
-            }
+            } 
           }
         })
       },
+      getDstCitiesByWareKind() {
+	    	let url = `/portal/api/waretripinfo/findSrcAndDstListByWareKind/${this.storeId}?wareKindId=${this.wareKind}`;
+	    	axios.get(url).then(res => {
+	    		// console.log(res)
+	    		if(res.data.status === 1) {
+	    			this.dstCityList = res.data.data.dstCities;
+	    		} else {
+	    			this.$message.error(res.data.message)
+	    		}
+	    	})
+	    },
       handleCityClick(cityCode) {
         if(this.dstCityCode === cityCode) return;
         this.dstCityCode = cityCode;
@@ -111,7 +123,7 @@
     created() {
       this.storeId = sessionStorage.getItem('storeId');
       this.wareKind = this.$route.query.kindId;
-      this.getDstCityList()
+      this.getDstCitiesByWareKind()
       this.getWareList()
     },
   }

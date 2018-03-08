@@ -5,7 +5,7 @@
     </h3>
     <h4 class="warekind-subtitle">{{warekind.subTitle}}</h4>
     <div class="link">
-      <router-link to="/" class="more-link">更多></router-link>
+      <router-link :to="warekind.moreUrl" class="more-link">更多></router-link>
     </div>
   </div>
 </template>
