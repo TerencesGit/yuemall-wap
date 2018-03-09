@@ -205,20 +205,20 @@
 					},
 				]
 				this.warekinds = _kindListOrder;
-				kindlist(data).then(res => {
-					if(res.data.status === 1) {
-						this.navList = res.data.data;
-						this.navList.forEach((kind, index) => {
-							kind.imgSrc = kindImgSrc[index];
-							kind.href = '/ware/list?kindId=' + kind.id;
-						})
-						let _nav = JSON.stringify(this.navList);
-						this.navList[1] = JSON.parse(_nav)[3];
-						this.navList[3] = JSON.parse(_nav)[1];
-					} else {
-						this.showToast(res.data.msg)
-					}
-				})
+				// kindlist(data).then(res => {
+				// 	if(res.data.status === 1) {
+				// 		this.navList = res.data.data;
+				// 		this.navList.forEach((kind, index) => {
+				// 			kind.imgSrc = kindImgSrc[index];
+				// 			kind.href = '/ware/list?kindId=' + kind.id;
+				// 		})
+				// 		let _nav = JSON.stringify(this.navList);
+				// 		this.navList[1] = JSON.parse(_nav)[3];
+				// 		this.navList[3] = JSON.parse(_nav)[1];
+				// 	} else {
+				// 		this.showToast(res.data.msg)
+				// 	}
+				// })
 			},
 			getDstCity(storeId) {
 				let data = {

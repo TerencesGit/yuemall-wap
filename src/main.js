@@ -11,10 +11,12 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import '@/assets/css/main.scss'
 import '@/assets/css/theme/default.scss'
-// import Calendar from './components/pricecalendar'
+import Calendar from './components/pricecalendar'
+import InputNumber from './components/input-number'
 Vue.use(Router)
 Vue.use(MintUI)
-// Vue.use(Calendar)
+Vue.use(Calendar)
+Vue.use(InputNumber)
 Vue.directive('title', {
   inserted (el, binding) {
     document.title = el.dataset.title

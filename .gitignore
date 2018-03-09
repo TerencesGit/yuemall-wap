@@ -3,6 +3,7 @@ node_modules/
 dist/
 api
 assets
+components
 data
 static/image
 npm-debug.log*

@@ -7,7 +7,7 @@
 			<span>基础</span>
 		</div>
 		<div class="ware-price-calendar">
-			<!-- <price-calendar 
+			<price-calendar 
 				:data="skuData"
 				:firstDayOfWeek="0"
 				:endDate="endDate"
@@ -15,9 +15,23 @@
 				:selectedDay="selectedDay"
 				@dayClick="dayClick"
 				@prevMonth="handlePrevMonth"
-				@nextMonth="handleNextMonth"
-				>
-			</price-calendar> -->
+				@nextMonth="handleNextMonth">
+			</price-calendar>
+		</div>
+		<div class="ware-base">
+			<label>基础</label>
+			<!-- <input-number
+			  v-model="baseNum"
+			  :min="1"
+			  :max="10"
+			  @change="handleChange">
+			</input-number> -->
+			<input-number
+			  v-model="baseNum"
+			  :min="1"
+			  :max="10"
+			  @change="handleChange">
+			</input-number>
 		</div>
 	</section>
 </template>
@@ -32,6 +46,8 @@
 				skuData: [],
 				endDate: '',
 				calendarBg: 'rgb(0, 161, 229)',
+				baseNum: 1,
+				baseNum1 : 5,
 			}
 		},
 		methods: {
@@ -54,6 +70,10 @@
 			handleNextMonth(date) {
 				this.skuDate = date;
 				this.getWareSkuData()
+			},
+			handleChange(val) {
+				// console.log(val)
+				console.log(this.baseNum)
 			},
 			getWareSkuData() {
 				let data = {
@@ -98,6 +118,15 @@
 		}
 		.bg-red {
 			background: #E60012;
+		}
+	}
+	.ware-base {
+		display: flex;
+		justify-content: space-between;
+		padding: 5px 10px;
+		background: #fff;
+		label {
+			line-height: 30px;
 		}
 	}
 </style>
