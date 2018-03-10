@@ -13,10 +13,12 @@ import '@/assets/css/main.scss'
 import '@/assets/css/theme/default.scss'
 import Calendar from './components/pricecalendar'
 import InputNumber from './components/input-number'
+import Checkbox from './components/checkbox'
 Vue.use(Router)
 Vue.use(MintUI)
 Vue.use(Calendar)
 Vue.use(InputNumber)
+Vue.use(Checkbox)
 Vue.directive('title', {
   inserted (el, binding) {
     document.title = el.dataset.title
