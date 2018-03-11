@@ -23,7 +23,7 @@
 			<input-number
 			  v-model="baseNum"
 			  :min="1"
-			  :max="10"
+			  :max="storageNum"
 			  @change="handleChange">
 			</input-number>
 		</div>
@@ -31,11 +31,32 @@
 			<h3>可额外选购</h3>
 			<div class="service-panel">
 				<div class="panel-header">
-					<h4>服务</h4>
+					<h4>附加服务</h4>
+				</div>
+				
+				<div class="panel-body">
+					<div v-show="wareServices.length === 0" class="text-center">
+						暂无服务
+					</div>
+					<ul class="service-list" v-show="wareServices.length > 0">
+						<li v-for="(item, index) in wareServices" :key="index" class="service-item">
+							<div><checkbox v-model="item.checked"></checkbox><span class="service-name">{{item.wareName}}</span></div>
+							<div><label>单价：</label><span class="service-price"><i>￥</i>{{item.servicePrice}}</span></div>
+							<input-number v-model="item.serviceNum" :min="1" :max="10" @change="handleChange"></input-number>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="service-panel">
+				<div class="panel-header">
+					<h4>推荐活动</h4>
 				</div>
 				<div class="panel-body">
-					<ul class="service-list">
-						<li v-for="(item, index) in wareServices" :key="index" class="service-item">
+					<div v-show="wareActivities.length === 0" class="text-center">
+						暂无推荐活动
+					</div>
+					<ul class="service-list" v-show="wareActivities.length > 0">
+						<li v-for="(item, index) in wareActivities" :key="index" class="service-item">
 							<div><checkbox v-model="item.checked"></checkbox><span class="service-name">{{item.wareName}}</span></div>
 							<div><label>单价：</label><span class="service-price"><i>￥</i>{{item.servicePrice}}</span></div>
 							<input-number v-model="item.serviceNum" :min="1" :max="10" @change="handleChange"></input-number>
@@ -71,9 +92,11 @@
 				endDate: '',
 				calendarBg: 'rgb(0, 161, 229)',
 				wareServices: [],
+				wareActivities: [],
 				agreement: false,
 				baseNum: 1,
 				basePrice: 0,
+				storageNum: 1,
 			}
 		},
 		computed: {
@@ -93,16 +116,17 @@
 			currentDate() {
 				let date = new Date();
 				let year = date.getFullYear(),
-						month = String(date.getMonth() + 1).replace(/^(\d)$/, '0$1'),
-						day = String(date.getDate()).replace(/^(\d)$/, '0$1');
+					month = String(date.getMonth() + 1).replace(/^(\d)$/, '0$1'),
+					day = String(date.getDate()).replace(/^(\d)$/, '0$1');
 				return year + '-' + month + '-' + day;
 			},
 			dayClick(cell) {
-				console.log(cell)
 				if(cell.data) {
+					console.log(cell.data)
 					this.skuDate = cell.date;
 					this.selectedDay = cell.date;
 					this.basePrice = cell.data.adultPrice;
+					this.storageNum = cell.data.skuStock.storageNum;
 					this.getWareService()
 				}
 			},
@@ -145,15 +169,26 @@
 					if(res.data.status === 1) {
 						this.wareServices = [];
 						let wareServiceInfos = res.data.data.wareServiceInfos;
-						wareServiceInfos.forEach(ware => {
+						let wareActivityInfos = res.data.data.wareActivityInfos;
+						wareServiceInfos.forEach(service => {
 							let serviceObj = {
-								id: ware.id,
-								wareName: ware.wareName,
-								servicePrice: ware.wareSkuInfos[0].adultPrice,
+								id: service.id,
+								wareName: service.wareName,
+								servicePrice: service.wareSkuInfos[0].adultPrice,
 								serviceNum: 1,
 								checked: false,
 							}
 							this.wareServices.push(serviceObj)
+						})
+						wareActivityInfos.forEach(activity => {
+							let activityObj = {
+								id: activity.id,
+								wareName: activity.wareName,
+								servicePrice: activity.wareSkuInfos[0].adultPrice,
+								serviceNum: 1,
+								checked: false,
+							}
+							this.wareActivities.push(activityObj)
 						})
 					} else {
 						this.$toast({
@@ -167,12 +202,58 @@
 				if(!this.selectedDay) {
 					this.$toast({
 						message: '请选择预定日期',
-					}) 
+						duration: 1000
+					})
+					return;
 				} else if(!this.agreement) {
 					this.$toast({
 						message: '请同意预定合同',
-					}) 
+						duration: 1000
+					})
+					return; 
 				}
+				let _serviceList = this.wareServices.filter(service => service.checked)
+				let _activityList = this.wareActivities.filter(activity => activity.checked)
+				let wareOrderInfo = {
+					wareId: this.wareId,
+					skuDate: this.selectedDay,
+					adultNum: this.baseNum,
+					singleNum: 0,
+					childNum: 0,
+					activityInfos: _activityList,
+					serviceInfos: _serviceList,
+					// wareName: this.wareDetail.wareName,
+					// wareImg: this.wareDetail.wareImgInfos[0].filePath,
+					adultPrice: this.basePrice,
+					childNum: 0,
+					// totalPrice: this.baseNum * this.basePrice,
+					// childPrice: 4000,
+					// singleAmount: this.singleTotalPrice,
+					// cityName: '',
+					// homeNum: 1,
+					// servicePrice: this.serviceTotalPrice,
+					// activityPrice: this.activityTotalPrice,
+					// totalAmount: this.totalPrice,
+				}
+				console.log(wareOrderInfo)
+				advanceOrder(wareOrderInfo).then(res => {
+					console.log(res)
+					// sessionStorage.setItem('orderInfo', JSON.stringify(wareOrderInfo))
+					// this.$router.push('/ware/fillInfo?orderId=415177136070425')
+					if(res.data.status === 1) {
+						let orderInfo = res.data.data;
+						sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))
+						// this.$router.push('/ware/reserve?wareId='+this.wareId)
+					} else {
+						this.$toast({
+							message: res.data.msg || '服务器响应失败',
+							duration: 1000
+						})
+					}
+				}).catch(err => {
+					console.log(err)
+					this.$catchError(err)
+				})
 			}
 		},
 		created() {
@@ -225,6 +306,7 @@
 			border-left: 3px solid $color1;
 		}
 		.service-panel {
+			margin-bottom: 10px;
 			border-radius: 5px;
 			border: 1px solid #ccc;
 			.panel-header {

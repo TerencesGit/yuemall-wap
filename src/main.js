@@ -6,6 +6,7 @@ import Router from 'vue-router'
 import App from './App'
 import routes from './router'
 import MintUI from 'mint-ui'
+import { Toast } from 'mint-ui';
 import 'mint-ui/lib/style.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -29,7 +30,17 @@ const router = new Router({
 	routes
 })
 Vue.config.productionTip = false
-
+Vue.prototype.$catchError = (err) => {
+  if(!err.data) {
+    Toast('服务器响应错误')
+    return;
+  }
+  if(err.data.code) {
+    Toast(err.data.message)
+  } else {
+    Toast('服务器响应超时')
+  }
+}
 router.beforeEach((to, from, next) => {
   NProgress.start()
   next()
