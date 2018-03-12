@@ -97,6 +97,7 @@
 				baseNum: 1,
 				basePrice: 0,
 				storageNum: 1,
+				childPrice: 0,
 			}
 		},
 		computed: {
@@ -126,6 +127,7 @@
 					this.skuDate = cell.date;
 					this.selectedDay = cell.date;
 					this.basePrice = cell.data.adultPrice;
+					this.childPrice = cell.data.childPrice;
 					this.storageNum = cell.data.skuStock.storageNum;
 					this.getWareService()
 				}
@@ -218,28 +220,27 @@
 					wareId: this.wareId,
 					skuDate: this.selectedDay,
 					adultNum: this.baseNum,
+					adultPrice: this.basePrice,
 					singleNum: 0,
 					childNum: 0,
+					childPrice: this.childPrice,
 					activityInfos: _activityList,
 					serviceInfos: _serviceList,
 					// wareName: this.wareDetail.wareName,
 					// wareImg: this.wareDetail.wareImgInfos[0].filePath,
-					adultPrice: this.basePrice,
-					childNum: 0,
 					// totalPrice: this.baseNum * this.basePrice,
-					// childPrice: 4000,
 					// singleAmount: this.singleTotalPrice,
 					// cityName: '',
 					// homeNum: 1,
-					// servicePrice: this.serviceTotalPrice,
 					// activityPrice: this.activityTotalPrice,
-					// totalAmount: this.totalPrice,
+					servicePrice: this.serviceTotalPrice,
+					totalAmount: this.totalPrice,
 				}
 				console.log(wareOrderInfo)
 				advanceOrder(wareOrderInfo).then(res => {
 					console.log(res)
-					// sessionStorage.setItem('orderInfo', JSON.stringify(wareOrderInfo))
-					// this.$router.push('/ware/fillInfo?orderId=415177136070425')
+					sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
+					this.$router.push('/ware/order?orderId=415177136070425')
 					if(res.data.status === 1) {
 						let orderInfo = res.data.data;
 						sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))

@@ -32,7 +32,7 @@
 					<img src="../../assets/img/yzm.png" class="icon">
 				</label>
 				<input type="text" class="form-item-input"  placeholder="请输入手机验证码" v-model.trim="form.smsCode">
-				<mt-button type="primary"class="small-size" @click.native="sendCode" :disabled="disabled">{{buttonText}}</mt-button>
+				<mt-button type="primary" class="small-size" @click.native="sendCode" :disabled="disabled">{{buttonText}}</mt-button>
 			</div>
 			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">立即注册</mt-button>
