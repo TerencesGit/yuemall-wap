@@ -117,6 +117,7 @@
 						 console.log(res.data.data)
 						 this.wareDetail = res.data.data;
 						 document.title = this.wareDetail.wareName;
+						 sessionStorage.setItem('wareName', this.wareDetail.wareName)
 						 this.keyWords = this.wareDetail.keyWords.split(',').splice(0,3);
 						 this.bannerList = this.wareDetail.wareImgInfos;
 					}

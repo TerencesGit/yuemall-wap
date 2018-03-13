@@ -6,6 +6,7 @@ import WareDetail from '@/pages/ware/detail'
 import WareList from '@/pages/ware/list'
 import WareReserve from '@/pages/ware/reserve'
 import WareOrder from '@/pages/ware/order'
+import WarePay from '@/pages/ware/pay'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/ware/order',
     name: '商品订单页',
     component: WareOrder
+  },
+  {
+    path: '/ware/pay',
+    name: '商品支付页',
+    component: WarePay
   },
 ]
 export default routes

@@ -8,23 +8,23 @@
               <ul class="panel-content-list order-info">
                   <li class="panel-content-item">
                       <label class="item-label required">线路信息</label>
-                      <p>{{wareOrderInfo.wareName}}</p>
+                      <p class="item-text">{{wareName}}</p>
                   </li>
                    <li class="panel-content-item">
                       <label class="item-label required">出行日期</label>
-                      <p>{{wareOrderInfo.skuDate}}</p>
+                      <p class="item-text">{{wareOrderInfo.skuDate}}</p>
                   </li>
                   <li class="panel-content-item">
-                      <label class="item-label required">总价</label>
-                      <p>{{wareOrderInfo.totalPrice}}</p>
+                      <label class="item-label required">总 价</label>
+                      <p class="item-text">￥{{wareOrderInfo.totalAmount || 0}}</p>
                   </li>
                   <li class="panel-content-item">
-                      <label class="item-label required">基础</label>
-                      <p><i>￥</i>{{wareOrderInfo.adultPrice + ' * ' + wareOrderInfo.adultNum}}</p>
+                      <label class="item-label required">基 础</label>
+                      <p class="item-text"><i>￥</i>{{wareOrderInfo.adultPrice + ' * ' + wareOrderInfo.adultNum}}</p>
                   </li>
                   <li class="panel-content-item">
-                      <label  class="item-label" style="padding-left: 16px">其他</label>
-                      <p><i>￥</i>{{wareOrderInfo.servicePrice || 0}}</p>
+                      <label  class="item-label" style="padding-left: 10px">其 他</label>
+                      <p class="item-text"><i>￥</i>{{wareOrderInfo.servicePrice || 0}}</p>
                   </li>
               </ul>
           </div>
@@ -38,11 +38,11 @@
           <div class="panel-body">
               <form action="" class="contact-form">
                   <div class="form-item">
-                      <label class="form-item-label required">姓名</label>
+                      <label class="form-item-label required">姓 名</label>
                       <input type="text" v-model="contactForm.contactName" class="form-item-input" placeholder="输入联系人姓名">
                   </div>
                   <div class="form-item">
-                    <label class="form-item-label required">性别</label>
+                    <label class="form-item-label required">性 别</label>
                     <div class="form-item-radio">
                         <label class="radio" @click="handleRadio(1)">
                             <span class="radio-core" :class="{checked: contactForm.sex === 1}"></span>
@@ -59,7 +59,7 @@
                     <input type="text" v-model="contactForm.contactMobile" class="form-item-input" placeholder="输入手机号码">
                   </div>
                   <div class="form-item">
-                    <label class="form-item-label required">邮箱</label>
+                    <label class="form-item-label required">邮 箱</label>
                     <input type="text" v-model="contactForm.contactEmail" class="form-item-input" placeholder="输入邮箱号">
                   </div>
               </form>
@@ -75,6 +75,7 @@
 export default {
   data() {
       return {
+          wareName: '',
           wareOrderInfo: {},
           contactForm: {
               contactName: '',
@@ -119,7 +120,7 @@ export default {
             advanceOrder(wareOrderInfo).then(res => {
                 console.log(res)
                 sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
-                this.$router.push('/ware/order?orderId=415177136070425')
+                this.$router.push('/ware/pay?payId=415177136070425')
                 if(res.data.status === 1) {
                     let payId = res.data.data;
                     // this.$router.push('/ware/pay?payId='+payId)
@@ -136,13 +137,14 @@ export default {
       }
   },
   created() {
+      this.wareName = sessionStorage.getItem('wareName');
       this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
   }
 }
 </script>
 <style lang="scss" scoped>
     .order-page {
-        padding: 15px;
+        padding: 15px 15px 50px 15px;
         background: #fff;
     }
     .radio-core {
@@ -202,7 +204,6 @@ export default {
         bottom: 0;
         width: 100%;
         .submit-button {
-            
             width: 100%;
             padding: 12px;
             color: #fff;

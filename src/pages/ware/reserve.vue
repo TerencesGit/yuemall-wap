@@ -40,9 +40,23 @@
 					</div>
 					<ul class="service-list" v-show="wareServices.length > 0">
 						<li v-for="(item, index) in wareServices" :key="index" class="service-item">
-							<div><checkbox v-model="item.checked"></checkbox><span class="service-name">{{item.wareName}}</span></div>
-							<div><label>单价：</label><span class="service-price"><i>￥</i>{{item.servicePrice}}</span></div>
-							<input-number v-model="item.serviceNum" :min="1" :max="10" @change="handleChange"></input-number>
+							<div class="item-left">
+								<div class="item-name">
+									<checkbox v-model="item.checked"></checkbox>
+									<span class="service-name">{{item.wareName}}</span>
+								</div>
+								<div class="item-price">
+									<label>单价：</label>
+									<span class="service-price"><i>￥</i>{{item.servicePrice}}</span>
+								</div>
+							</div>
+							<input-number 
+								v-model="item.serviceNum" 
+								:min="1" 
+								:max="10" 
+								class="item-right"
+								@change="handleChange">
+							</input-number>
 						</li>
 					</ul>
 				</div>
@@ -57,9 +71,23 @@
 					</div>
 					<ul class="service-list" v-show="wareActivities.length > 0">
 						<li v-for="(item, index) in wareActivities" :key="index" class="service-item">
-							<div><checkbox v-model="item.checked"></checkbox><span class="service-name">{{item.wareName}}</span></div>
-							<div><label>单价：</label><span class="service-price"><i>￥</i>{{item.servicePrice}}</span></div>
-							<input-number v-model="item.serviceNum" :min="1" :max="10" @change="handleChange"></input-number>
+							<div class="item-left">
+								<div class="item-name">
+									<checkbox v-model="item.checked"></checkbox>
+									<span class="service-name">{{item.wareName}}</span>
+								</div>
+								<div class="item-price">
+									<label>单价：</label>
+									<span class="service-price"><i>￥</i>{{item.servicePrice}}</span>
+								</div>
+							</div>
+							<input-number 
+								v-model="item.serviceNum" 
+								:min="1" 
+								:max="10" 
+								class="item-right"
+								@change="handleChange">
+							</input-number>
 						</li>
 					</ul>
 				</div>
@@ -102,13 +130,21 @@
 		},
 		computed: {
 			totalPrice() {
-				return this.baseNum * this.basePrice + this.serviceTotalPrice;
+				return this.baseNum * this.basePrice + this.serviceTotalPrice + this.activityTotalPrice;
 			},
 			serviceTotalPrice() {
 				let totalPrice = 0;
 				let wareServices = this.wareServices.filter(service => service.checked);
 				for(let i = 0; i < wareServices.length; i++) {
 					totalPrice += (wareServices[i].servicePrice * wareServices[i].serviceNum);
+				}
+				return totalPrice;
+			},
+			activityTotalPrice() {
+				let totalPrice = 0;
+				let wareActivities = this.wareActivities.filter(activity => activity.checked);
+				for(let i = 0; i < wareActivities.length; i++) {
+					totalPrice += (wareActivities[i].servicePrice * wareActivities[i].serviceNum);
 				}
 				return totalPrice;
 			},
@@ -233,7 +269,7 @@
 					// cityName: '',
 					// homeNum: 1,
 					// activityPrice: this.activityTotalPrice,
-					servicePrice: this.serviceTotalPrice,
+					servicePrice: this.serviceTotalPrice + this.activityTotalPrice,
 					totalAmount: this.totalPrice,
 				}
 				console.log(wareOrderInfo)
@@ -328,6 +364,12 @@
 						line-height: 30px;
 						margin-bottom: 10px;
 						border-bottom: 1px solid #ccc;
+						.item-right {
+							margin-top: 15px;
+						}
+						.item-price {
+							margin-left: 30px;
+						}
 						.service-name {
 							margin-left: 10px;
 						}
