@@ -81,9 +81,17 @@
 		padding-top: 30px;
 	}
 	.icon {
-		width: 20px;
+		width: 18px;
 	}
 	.form-button {
 		margin: 15px 10px;
+	}
+	.form-item {
+		padding: 0 15px;
+		.form-item-label {
+			img {
+				margin: 8px 15px 0 0;
+			}
+		}
 	}
 </style>

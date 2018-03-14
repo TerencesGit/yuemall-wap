@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<HeaederComp :storeLogo="storeLogo"></HeaederComp>
-		<mt-swipe :style="{height: bannerHeight}">
+		<mt-swipe :style="{height: bannerHeight}" v-if="bannerList.length > 0">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 				<router-link :to="'/ware/detail?id='+item.linkAddr.split('=')[1]">
 					<img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName" style="height: 100%;">
@@ -138,13 +138,10 @@
 					if(res.data.status === 1) {
 						let store = res.data.data;
 						document.title = store.storeName;
-						// this.storeId = store.merchantId;
 						this.storeLogo = store.storeLogo;
 						this.getBannerList()
 						this.getKindList()
 						this.getDstCity()
-						// sessionStorage.setItem('store', JSON.stringify(store))
-						
 						this.getLocalWareList()
 						this.getGlobalWareList()
 						this.getTripWareList()
@@ -268,7 +265,6 @@
 				findWareListByKind(data).then(res => {
 					if(res.data.status === 1) {
 						this.localWareList = res.data.data.wares;
-						// console.log(res.data.data)
 					} else {
 						this.showToast(res.data.msg)
 					}

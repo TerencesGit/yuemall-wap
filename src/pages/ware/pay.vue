@@ -131,7 +131,6 @@ export default {
       this.wareName = sessionStorage.getItem('wareName');
       this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
       this.payId = this.$route.query.payId;
-      console.log(this.payId)
   }
 }
 </script>
@@ -202,5 +201,3 @@ export default {
         }
     }
 </style>
-
-
