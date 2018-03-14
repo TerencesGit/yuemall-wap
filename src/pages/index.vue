@@ -4,7 +4,7 @@
 		<mt-swipe :style="{height: bannerHeight}">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 				<router-link :to="'/ware/detail?id='+item.linkAddr.split('=')[1]">
-					<img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName">
+					<img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName" style="height: 100%;">
 				</router-link>
 			</mt-swipe-item>
 		</mt-swipe>
@@ -124,26 +124,27 @@
 			getStore() {
 				findStoreByWapDoMain().then(res => {
 					if(res.data.status === 1) {
-						let storeId = res.data.data;
-						this.getMerchantStore(storeId)
+						this.storeId = res.data.data;
+						sessionStorage.setItem('storeId', this.storeId)
+						this.getMerchantStore()
 					}
 				})
 			},
-			getMerchantStore(storeId) {
+			getMerchantStore() {
 				let data = {
-					id: storeId
+					id: this.storeId
 				}
 				findmerchantStoreBystoreId(data).then(res => {
 					if(res.data.status === 1) {
 						let store = res.data.data;
 						document.title = store.storeName;
-						this.storeId = store.merchantId;
+						// this.storeId = store.merchantId;
 						this.storeLogo = store.storeLogo;
-						this.getBannerList(this.storeId)
-						this.getKindList(this.storeId)
-						this.getDstCity(this.storeId)
+						this.getBannerList()
+						this.getKindList()
+						this.getDstCity()
 						// sessionStorage.setItem('store', JSON.stringify(store))
-						sessionStorage.setItem('storeId', this.storeId)
+						
 						this.getLocalWareList()
 						this.getGlobalWareList()
 						this.getTripWareList()
@@ -152,9 +153,9 @@
 					}
 				})
 			},
-			getBannerList(merchantId) {
+			getBannerList() {
 				let data = {
-					merchantId
+					merchantId: this.storeId
 				}
 				this.$indicator.open({
 				  spinnerType: 'snake'
@@ -168,9 +169,9 @@
 					}
 				})
 			},
-			getKindList(storeId) {
+			getKindList() {
 				let data = {
-					storeId
+					storeId: this.storeId
 				}
 				let _kindListOrder = [
 					{
@@ -220,16 +221,16 @@
 				// 	}
 				// })
 			},
-			getDstCity(storeId) {
+			getDstCity() {
 				let data = {
-					providerId: storeId
+					providerId: this.storeId
 				}
 				dstcity(data).then(res => {
 					if(res.data.status === 1) {
 						this.dstCity = res.data.data;
 						this.dstCity[0].checked = true;
 						this.cityCode = this.dstCity[0].dstCityCode;
-						this.getRecommentWareList(storeId, this.cityCode)
+						this.getRecommentWareList()
 					} else {
 						this.showToast(res.data.msg)
 					}
@@ -238,14 +239,18 @@
 			handleCityClick(cityCode) {
 				if(this.cityCode === cityCode) return;
 				this.cityCode = cityCode;
-				this.getRecommentWareList(this.storeId, cityCode)
+				this.getRecommentWareList()
 			},
-			getRecommentWareList(storeId, dstCityCode) {
+			getRecommentWareList() {
 				let data = {
-					providerId: storeId,
-					dstCityCode
+					providerId: this.storeId,
+					dstCityCode: this.cityCode,
 				}
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				recommendware(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.recommendWare = res.data.data;
 					} else {
@@ -313,9 +318,9 @@
 			}
 		},
 		mounted() {
-			this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			this.bannerHeight = (document.body.clientWidth * 700 / 1920) + 'px';
 			window.onresize = () => {
-				this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+				this.bannerHeight = (document.body.clientWidth * 700 / 1920) + 'px';
 			}
 		},
 		created() {

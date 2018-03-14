@@ -34,13 +34,21 @@ export default {
       }
   },
   methods: {
-      showToast(msg, duration) {
+        showToast(msg, duration) {
           this.$toast({
               message: msg,
               duration: duration
           })
-      },
-      yuePay() {
+        },
+        isWeiXin() {
+            const ua = window.navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        yuePay() {
           let params = {
               orderPayId: this.payId
           }
@@ -56,8 +64,8 @@ export default {
           }).catch(err => {
               console.log(err)
           })
-      },
-      wxPay() {
+        },
+        wxPay() {
           let data= {
               id: this.payId,
               payType: 1
@@ -91,17 +99,33 @@ export default {
                     }
                 );
               } else {
-                this.showToast('服务器响应错误',1000)
+                this.showToast(res.data.msg, 1000)
               }
           })
-      },
-      handlePay(payway) {
-        if(payway === 'YBF') {
-            this.yuePay()
-        } else if(payway === 'WXP') {
-            this.wxPay()
-        }
-      },
+        },
+        wxH5Pay() {
+            let data = {
+                id: this.payId
+            }
+            H5Pay(data).then(res => {
+                if(res.data.status === 1 && res.data.url) {
+                    window.location.href = res.data.url;
+                } else {
+                    this.showToast(res.data.msg, 1000)
+                }
+            })
+        },
+        handlePay(payway) {
+            if(payway === 'YBF') {
+                this.yuePay()
+            } else if(payway === 'WXP') {
+                if(this.isWeiXin()) {
+                    this.wxPay()
+                } else {
+                    this.wxH5Pay()
+                }
+            }
+        },
   },
   created() {
       this.wareName = sessionStorage.getItem('wareName');

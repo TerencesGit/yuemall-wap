@@ -71,7 +71,7 @@
   </section>
 </template>
 <script>
-    import {advanceOrder} from '@/api'
+    import { createOrder } from '@/api'
 export default {
   data() {
       return {
@@ -117,13 +117,13 @@ export default {
             wareOrderInfo.contactEmail = contactEmail;
             wareOrderInfo.sex = sex;
             console.log(wareOrderInfo)
-            advanceOrder(wareOrderInfo).then(res => {
+            createOrder(wareOrderInfo).then(res => {
                 console.log(res)
-                sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
-                this.$router.push('/ware/pay?payId=415177136070425')
+                // this.$router.push('/ware/pay?payId=415177136070425')
                 if(res.data.status === 1) {
                     let payId = res.data.data;
-                    // this.$router.push('/ware/pay?payId='+payId)
+                    sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
+                    this.$router.push('/ware/pay?payId='+payId)
                 } else {
                     this.$toast({
                         message: res.data.msg || '服务器响应失败',

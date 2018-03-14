@@ -93,7 +93,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<div class="fixed-footer">
 			<div class="agreement">
 				<checkbox v-model="agreement"></checkbox>
@@ -203,7 +202,11 @@
 					id: this. wareId,
 					skuDate: this.skuDate,
 				}
+				this.$indicator.open({
+				  spinnerType: 'snake'
+				})
 				wareService(data).then(res => {
+					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.wareServices = [];
 						let wareServiceInfos = res.data.data.wareServiceInfos;
