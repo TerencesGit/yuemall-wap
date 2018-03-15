@@ -30,6 +30,7 @@ export default {
             margin-bottom: 10px;
             img {
                 display: block;
+                width: 100%;
             }
             p {
                 padding: 3px 0 3px 5px;

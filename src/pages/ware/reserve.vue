@@ -96,7 +96,7 @@
 		<div class="fixed-footer">
 			<div class="agreement">
 				<checkbox v-model="agreement"></checkbox>
-				<span class="agreement-text">我已阅读并同意预订合同及产品所述全部内容</span>
+				<span class="agreement-text">我已阅读并同意 <router-link to="agreement">预订合同及产品所述全部内容</router-link></span>
 			</div>
 			<div class="reserve">
 				<div class="total-price">
@@ -158,7 +158,7 @@
 			},
 			dayClick(cell) {
 				if(cell.data) {
-					console.log(cell.data)
+					// console.log(cell.data)
 					this.skuDate = cell.date;
 					this.selectedDay = cell.date;
 					this.basePrice = cell.data.adultPrice;
@@ -275,9 +275,8 @@
 					servicePrice: this.serviceTotalPrice + this.activityTotalPrice,
 					totalAmount: this.totalPrice,
 				}
-				console.log(wareOrderInfo)
+				// console.log(wareOrderInfo)
 				advanceOrder(wareOrderInfo).then(res => {
-					console.log(res)
 					sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
 					this.$router.push('/ware/order?orderId=415177136070425')
 					if(res.data.status === 1) {

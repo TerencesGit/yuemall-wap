@@ -19,6 +19,7 @@ export default {
         padding: 0 5px;
         img {
             display: block;
+            width: 100%;
         }
         p {
             padding: 3px 0 3px 5px;

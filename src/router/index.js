@@ -5,6 +5,7 @@ import Index from '@/pages/index'
 import WareDetail from '@/pages/ware/detail'
 import WareList from '@/pages/ware/list'
 import WareReserve from '@/pages/ware/reserve'
+import WareAgreement from '@/pages/ware/agreement'
 import WareOrder from '@/pages/ware/order'
 import WarePay from '@/pages/ware/pay'
 
@@ -38,6 +39,11 @@ const routes = [
     path: '/ware/reserve',
     name: '商品预定页',
     component: WareReserve
+  },
+  {
+    path: '/ware/agreement',
+    name: '商品预定协议页',
+    component: WareAgreement
   },
   {
     path: '/ware/order',
