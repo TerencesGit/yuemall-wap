@@ -1,5 +1,5 @@
 <template>
-   <div class="agreement-page">
+   <div class="agreement-page" v-if="visible">
        <h1>预定合同</h1>
        <section>
            <h2>第一条 特别提示</h2>
@@ -82,21 +82,26 @@
            </p>
        </section>
        <footer>
-           <button @click="back">确定</button>
+           <button @click="handleClick">确定</button>
        </footer>
     </div>
 </template>
 <script>
 export default {
-  methods: {
-      back() {
-          this.$router.back()
-      }
-  }
+    name: 'Agreement',
+    props: ['visible'],
+    methods: {
+        handleClick() {
+            this.$emit('close', false)
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
     .agreement-page {
+        position: absolute;
+        top: 0;
+        z-index: 99;
         padding: 15px 15px 50px 15px;
         background: #fff;
         section {
@@ -122,7 +127,7 @@ export default {
             width: 100%;
             button {
                 width: 100%;
-                padding: 15px;
+                padding: 10px;
                 color: #fff;
                 font-size: 18px;
                 letter-spacing: .5em;

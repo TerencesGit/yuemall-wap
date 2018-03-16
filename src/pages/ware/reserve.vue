@@ -33,7 +33,6 @@
 				<div class="panel-header">
 					<h4>附加服务</h4>
 				</div>
-				
 				<div class="panel-body">
 					<div v-show="wareServices.length === 0" class="text-center">
 						暂无服务
@@ -96,7 +95,7 @@
 		<div class="fixed-footer">
 			<div class="agreement">
 				<checkbox v-model="agreement"></checkbox>
-				<span class="agreement-text">我已阅读并同意 <router-link to="agreement">预订合同及产品所述全部内容</router-link></span>
+				<span class="agreement-text">我已阅读并同意 <a href="javascrirpt:;" @click="agreementVisible = true">预订合同及产品所述全部内容</a></span>
 			</div>
 			<div class="reserve">
 				<div class="total-price">
@@ -105,11 +104,16 @@
 				<button class="reserve-button" @click="handleReserve">立即预定</button>
 			</div>
 		</div>
+		<Agreement :visible="agreementVisible" @close="handleClose"></Agreement>
 	</section>
 </template>
 <script>
+	import Agreement from './agreement';
 	import { wareSkuOfMonth, wareService, advanceOrder } from '@/api'
 	export default {
+		components: {
+			Agreement,
+		},
 		data() {
 			return {
 				wareId: '',
@@ -125,6 +129,7 @@
 				basePrice: 0,
 				storageNum: 1,
 				childPrice: 0,
+				agreementVisible: false,
 			}
 		},
 		computed: {
@@ -178,6 +183,9 @@
 			handleChange(val) {
 				// console.log(val)
 				// console.log(this.baseNum)
+			},
+			handleClose() {
+				this.agreementVisible = false;
 			},
 			getWareSkuData() {
 				let data = {
@@ -411,7 +419,7 @@
 				height: 50px;
 				padding: 10px 25px;
 				color: #fff;
-				background: #f00;
+				background: rgb(0, 161, 229)
 			}
 		}
 	}

@@ -17,9 +17,12 @@
 				</h4>
 			</div>
 			<div class="detail-item">
-				<div class="ware-price">
+				<div class="ware-price" v-if="isLogin">
 					<p class="text-price"><i class="icon-rmb">￥</i><strong>{{wareDetail.suggestedPrice}}</strong>
 					<span>{{wareDetail.unit}}</span>/起</p>
+				</div>
+				<div v-else>
+					<p class="text-price">登录后价格可见</p>
 				</div>
 			</div>
 			<div class="detail-item feature">
@@ -58,7 +61,7 @@
 					</a>
 				</li>
 				<li class="reserve">
-					<button class="reserve-button" @click="handleReserve">开始预订</button>
+					<button class="reserve-button" @click="handleReserve">查看档期/价格</button>
 				</li>
 			</ul>
 		</div>
@@ -114,7 +117,7 @@
 				wareDetail(data).then(res => {
 					this.$indicator.close()
 					if(res.data.status === 1) {
-						 console.log(res.data.data)
+						//  console.log(res.data.data)
 						 this.wareDetail = res.data.data;
 						 document.title = this.wareDetail.wareName;
 						 sessionStorage.setItem('wareName', this.wareDetail.wareName)
@@ -150,7 +153,7 @@
 					wareId: this.wareId
 				}
 				createWareCollection(data).then(res => {
-					console.log(res)
+					// console.log(res)
 					if(res.data.status === 1) {
 						this.showToast('收藏成功')
 					} else {
@@ -159,8 +162,13 @@
 				})
 			},
 			handleReserve() {
-				console.log(this.wareId)
+				// console.log(this.wareId)
 				this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
+			}
+		},
+		computed: {
+			isLogin() {
+				return this.$store.getters.isLogin;
 			}
 		},
 		created() {
@@ -283,7 +291,7 @@
 					width: 100%;
 					color: #fff;
 					font-size: 18px;
-					background: #f00;
+					background: rgb(0, 161, 229);
 				}
 			}
 		}

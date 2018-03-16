@@ -15,6 +15,7 @@ import '@/assets/css/theme/default.scss'
 import Calendar from './components/pricecalendar'
 import InputNumber from './components/input-number'
 import Checkbox from './components/checkbox'
+import store from './vuex/store'
 Vue.use(Router)
 Vue.use(MintUI)
 Vue.use(Calendar)
@@ -52,5 +53,6 @@ router.afterEach((to, from) => {
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
