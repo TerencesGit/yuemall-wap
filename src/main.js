@@ -49,9 +49,16 @@ Vue.prototype.$showToast = (msg, duration = 1000) => {
   })
 }
 router.beforeEach((to, from, next) => {
-  // console.log(from)
   Vue.prototype.$fromPath = from.fullPath;
   NProgress.start()
+  // console.log(to)
+  // console.log(store.getters.isLogin)
+  let isMyCenterPage = to.path.indexOf('myCenter') === 1 || to.path.indexOf('mycenter') === 1;
+  let isLogin = store.getters.isLogin;
+  if(isMyCenterPage && isLogin !== 1) {
+    router.push('/login')
+    return;
+  }
   next()
 })
 router.afterEach((to, from) => {

@@ -303,7 +303,7 @@
 				.reserve-button {
 					width: 100%;
 					color: #fff;
-					font-size: 18px;
+					font-size: 16px;
 					background: rgb(0, 161, 229);
 				}
 			}

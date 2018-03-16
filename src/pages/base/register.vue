@@ -20,19 +20,19 @@
 				</label>
 				<input type="password" class="form-item-input"  placeholder="请再次输入密码" v-model.trim="form.password2">
 			</div>
-			<div class="form-item bg-white">
+			<!-- <div class="form-item bg-white">
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/yzm.png" class="icon">
 				</label>
 				<input type="text" class="form-item-input"  placeholder="请输入验证码" v-model.trim="form.authCode">
 				<canvas id="canvasCode" width="80px" height="30px" class="canvas-code" @click="drawCode"></canvas>
-			</div>
+			</div> -->
 			<div class="form-item bg-white smscode">
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/yzm.png" class="icon">
 				</label>
 				<input type="text" class="form-item-input"  placeholder="请输入手机验证码" v-model.trim="form.smsCode">
-				<mt-button type="primary" class="small-size" @click.native="sendCode" :disabled="disabled">{{buttonText}}</mt-button>
+				<mt-button type="primary" class="small-size" @click.native="sendCode" :disabled="disabled" style="border-radius: 0">{{buttonText}}</mt-button>
 			</div>
 			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">立即注册</mt-button>
@@ -44,8 +44,7 @@
 	</div>
 </template>
 <script>
-	import Utils from '@/assets/js/utils'
-	import { requestRegister, smsverificode } from '@/api'
+	import { findStoreByWapDoMain, requestRegister, smsverificode } from '@/api'
 	export default {
 		data() {
 			return {
@@ -56,103 +55,95 @@
 					authCode: '',
 					smsCode: '',
 				},
+				storeId: '',
 				authCode: '',
 				buttonText: '获取验证码',
 				disabled: false,
 			}
 		},
 		methods: {
-			showToast(msg) {
-				this.$toast({
-					message: msg,
-					duration: 1000,
+			getStore() {
+				findStoreByWapDoMain().then(res => {
+					if(res.data.status === 1) {
+						this.storeId = res.data.data;
+						sessionStorage.setItem('storeId', this.storeId)
+					} else {
+						this.$showToast('获取商户信息失败')
+					}
 				})
 			},
-			drawCode () {
-        this.authCode = Utils.canvasCode('canvasCode')
-      },
-      countDown () {
-			  let count = 10;
-			  var timer;
-			  timer = setInterval(() => {
-			      if (count === 0) {
-			        clearInterval(timer)
-			        count = 60;
-			        this.disabled = false
-			        this.buttonText = '重新获取'
-			      } else {
-			        this.buttonText = `重新获取${count--}s`
-			      }
-			    }, 1000)
-		  },
-      sendCode() {
-      	if(!this.form.username.match(/^(13|14|15|17|18)\d{9}$/)) {
-					this.showToast('请输入正确手机号')
-					return;
+			countDown () {
+					let count = 10;
+					var timer;
+					timer = setInterval(() => {
+						if (count === 0) {
+							clearInterval(timer)
+							count = 60;
+							this.disabled = false
+							this.buttonText = '重新获取'
+						} else {
+							this.buttonText = `重新获取${count--}s`
+						}
+						}, 1000)
+				},
+			sendCode() {
+				if(!this.form.username.match(/^(13|14|15|17|18)\d{9}$/)) {
+							this.$showToast('请输入正确手机号')
+							return;
+						}
+				let data = {
+					phone: this.form.username,
 				}
-      	let data = {
-      		phone: this.form.username,
-      	}
-      	smsverificode(data).then(res => {
-      		console.log(res)
-      		if(res.data.status === 1) {
-      			this.disabled = true;
-      			this.showToast('短信验证码已发送')
-      			this.countDown()
-      		} else {
-      			this.showToast(res.data.msg)
-      		}
-      	})
-      },
+				smsverificode(data).then(res => {
+					console.log(res)
+					if(res.data.status === 1) {
+						this.disabled = true;
+						this.$showToast('短信验证码已发送')
+						this.countDown()
+					} else {
+						this.$showToast(res.data.msg)
+					}
+				})
+			},
 			onSubmit() {
 				let self = this;
-				if(!this.form.username.match(/^(13|14|15|17|18)\d{9}$/)) {
-					this.showToast('请输入正确手机号')
+				if(!this.form.username.match(/^(13|14|15|16|17|18)\d{9}$/)) {
+					this.$showToast('请输入正确手机号')
 					return;
 				} else if (this.form.password.length < 6) {
-					this.showToast('密码不少于6位')
+					this.$showToast('密码不少于6位')
 					return;
 				} else if(this.form.password !== this.form.password2) {
-					this.showToast('两次密码输入不一致')
-					return;
-				} else if(this.form.authCode == ''){
-					this.showToast('请输入验证码')
-					return;
-				} else if(this.form.authCode.toUpperCase() !== this.authCode.toUpperCase()){
-					this.showToast('验证码输入错误')
+					this.$showToast('两次密码输入不一致')
 					return;
 				} else if (this.form.smsCode.length === 0) {
-					this.showToast('请输入手机验证码')
+					this.$showToast('请输入手机验证码')
 					return;
 				}
 				let data = {
 					username: this.form.username,
 					password: this.form.password,
-					registerType: 1,
-					storeId: 23,
 					code: this.form.smsCode,
+					storeId: this.storeId,
+					registerType: 1,
 				}
-				this.$indicator.open({
-				  text: '注册中...',
-				  spinnerType: 'snake'
-				})
 				requestRegister(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						let userInfo = res.data.data;
-						self.showToast(res.data.msg)
+						self.$showToast(res.data.msg)
 					} else {
-						self.showToast(res.data.msg)
+						self.$showToast(res.data.msg)
 					}
 				})
 			},
 			handleSignin() {
 				this.$router.push('/login')
-			}
+			},
 		},
-		mounted () {
-      this.drawCode()
-    }
+		created() {
+			this.storeId = sessionStorage.getItem('storeId');
+			if(!this.storeId) this.getStore()
+		}
 	}
 </script>
 <style scoped lang="scss">

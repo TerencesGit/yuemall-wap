@@ -35,7 +35,7 @@ export default {
             p {
                 padding: 3px 0 3px 5px;
                 color: #fff;
-                font-size: 16px;
+                font-size: 14px;
                 background: #000;
             }
         }

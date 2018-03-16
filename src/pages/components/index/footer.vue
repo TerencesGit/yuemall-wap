@@ -2,7 +2,7 @@
 	<footer class="fixed-navbar">
 		<ul class="nav-list">
 			<li class="nav-item">
-				<router-link to="/">
+				<router-link to="/index">
 					<!-- <i class="icon icon-home"></i> -->
 					<span>首页</span>
 				</router-link>
@@ -14,7 +14,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<router-link to="/login">
+				<router-link to="/myCenter">
 					<!-- <i class="icon icon-mine"></i> -->
 					<span>我的</span>
 				</router-link>
@@ -97,7 +97,7 @@
 					position: relative;
 					top: 2px;
 					color: #fff;
-					font-size: 16px;
+					font-size: 14px;
 				}
 			}
 		}
