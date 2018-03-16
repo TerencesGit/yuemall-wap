@@ -34,12 +34,6 @@ export default {
       }
   },
   methods: {
-        showToast(msg, duration) {
-          this.$toast({
-              message: msg,
-              duration: duration
-          })
-        },
         isWeiXin() {
             const ua = window.navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == 'micromessenger') {
@@ -56,10 +50,7 @@ export default {
               if(res.data.url) {
                   window.location.href = res.data.url;
               } else {
-                  this.$toast({
-                      message: '服务器响应错误',
-                      duration: 1000
-                  })
+                  this.$showToast('服务器响应错误')
               }
           }).catch(err => {
               console.log(err)
@@ -81,7 +72,7 @@ export default {
                         "paySign": res.data.paySign, //微信签名
                     }, function(res) {
                         if (res.err_msg == "get_brand_wcpay_request:ok") {
-                            this.showToast('支付成功', 1000);
+                            this.$showToast('支付成功');
                             // setTimeout(function() {
                             //     if (d.data.orderType == 0) { //拍摄
                             //         window.location.href = '../warp/completeInfo1.html?0?' + d.data.orderId + "?";
@@ -90,16 +81,16 @@ export default {
                             //     }
                             // }, 900);
                         } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                            this.showToast('支付已取消', 1000);
+                            this.$showToast('支付已取消');
                             // window.location.href = '../index.html';
                         } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-                            this.showToast('支付失败', 1000);
+                            this.$showToast('支付失败');
                             // window.location.href = '../index.html';
                         } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                     }
                 );
               } else {
-                this.showToast(res.data.msg, 1000)
+                this.$showToast(res.data.msg)
               }
           })
         },
@@ -111,7 +102,7 @@ export default {
                 if(res.data.status === 1 && res.data.url) {
                     window.location.href = res.data.url;
                 } else {
-                    this.showToast(res.data.msg, 1000)
+                    this.$showToast(res.data.msg)
                 }
             })
         },
@@ -128,9 +119,13 @@ export default {
         },
   },
   created() {
-      this.wareName = sessionStorage.getItem('wareName');
-      this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
-      this.payId = this.$route.query.payId;
+      if(this.$store.getters.isLogin === 1) {
+        this.wareName = sessionStorage.getItem('wareName');
+        this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
+        this.payId = this.$route.query.payId;
+      } else {
+          this.$router.push('/')
+      }
   }
 }
 </script>

@@ -304,9 +304,13 @@
 			}
 		},
 		created() {
-			this.wareId = this.$route.query.wareId;
-			this.skuDate = this.currentDate();
-			this.getWareSkuData()
+			if(this.$store.getters.isLogin === 1) {
+				this.wareId = this.$route.query.wareId;
+				this.skuDate = this.currentDate();
+				this.getWareSkuData()
+			} else {
+				this.$router.push('/')
+			}
 		}
 	}
 </script>

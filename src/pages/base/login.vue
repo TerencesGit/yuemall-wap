@@ -12,7 +12,7 @@
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/lock.png" class="icon">
 				</label>
-				<input type="text" class="form-item-input"  placeholder="请输入密码" v-model.trim="form.password">
+				<input type="password" class="form-item-input"  placeholder="请输入密码" v-model.trim="form.password">
 			</div>
 			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">登录</mt-button>
@@ -24,10 +24,11 @@
 	</div>
 </template>
 <script>
-	import { requestLogin } from '@/api'
+	import { findStoreByWapDoMain, requestLogin } from '@/api'
 	export default {
 		data() {
 			return {
+				storeId: '',
 				form: {
 					username: '',
 					password: '',
@@ -35,37 +36,40 @@
 			}
 		},
 		methods: {
-			showToast(msg) {
-				this.$toast({
-					message: msg,
-					duration: 1000,
+			getStore() {
+				findStoreByWapDoMain().then(res => {
+					if(res.data.status === 1) {
+						this.storeId = res.data.data;
+						sessionStorage.setItem('storeId', this.storeId)
+					} else {
+						this.$showToast('获取商户信息失败')
+					}
 				})
 			},
 			onSubmit() {
-				let self = this;
-				if(this.form.username == '') {
-					this.showToast('请输入用户名')
-				} else if (this.form.password == '') {
-					this.showToast('请输入密码')
+				if(this.form.username.length === 0) {
+					this.$showToast('请输入用户名')
+				} else if (this.form.password.length === 0) {
+					this.$showToast('请输入密码')
 				} else {
 					let data = {
 						username: this.form.username,
 						password: this.form.password,
+						storeId: this.storeId,
 						loginType: 1,
-						storeId: 23,
 					}
-					this.$indicator.open({
-					  text: '登录中...',
-					  spinnerType: 'snake'
-					})
 					requestLogin(data).then(res => {
-						this.$indicator.close()
 						if(res.data.status === 1) {
-							let userInfo = res.data.data;
-							console.log(userInfo)
-							self.showToast(res.data.msg)
+							this.$store.dispatch('changeLogin', 1)
+							this.$store.dispatch('saveUserInfo', res.data.data)
+							this.$showToast('登录成功')
+							if(this.$fromPath.indexOf('register') !== 1) {
+								this.$router.replace(this.$fromPath)
+							} else {
+								this.$router.replace('/')
+							}
 						} else {
-							self.showToast(res.data.msg)
+							this.$showToast(res.data.msg)
 						}
 					})
 				}
@@ -73,6 +77,10 @@
 			handleSignup() {
 				this.$router.push('/register')
 			}
+		},
+		created() {
+			this.storeId = sessionStorage.getItem('storeId');
+			if(!this.storeId) this.getStore()
 		}
 	}
 </script>

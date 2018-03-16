@@ -8,9 +8,12 @@
 					<ul class="ware-keywords clearfix">
 						<li v-for="(item, index) in ware.keyWords.split(',')" :key="index">{{item}}</li>
 					</ul>
-					<p class="price text-price">
+					<p class="price text-price" v-if="isLogin === 1">
 						<i class="icon-rmb">￥</i><strong>{{ware.suggestedPrice}}</strong>
 						<span>{{ware.unit}}</span>/起
+					</p>
+					<p v-else class="price text-price">
+						登录后价格可见
 					</p>
 				</div>
 			</router-link>
@@ -21,6 +24,14 @@
 	export default {
 		name: 'wareList',
 		props: ['wareData'],
+		data() {
+			return {
+				isLogin: 0
+			}
+		},
+		created() {
+			this.isLogin = this.$store.getters.isLogin;
+		}
 	}
 </script>
 <style scoped lang="scss">
@@ -52,6 +63,9 @@
 						font-size: 12px;
 						border: 1px solid #ccc;
 					}
+				}
+				.price {
+					margin-top: 5px;
 				}
 			}
 		}

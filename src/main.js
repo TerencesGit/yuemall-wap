@@ -6,7 +6,7 @@ import Router from 'vue-router'
 import App from './App'
 import routes from './router'
 import MintUI from 'mint-ui'
-import { Toast } from 'mint-ui';
+import { Toast, Indicator } from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -42,12 +42,40 @@ Vue.prototype.$catchError = (err) => {
     Toast('服务器响应超时')
   }
 }
+Vue.prototype.$showToast = (msg, duration = 1000) => {
+  Toast({
+    message: msg,
+    duration: duration
+  })
+}
 router.beforeEach((to, from, next) => {
+  // console.log(from)
+  Vue.prototype.$fromPath = from.fullPath;
   NProgress.start()
   next()
 })
 router.afterEach((to, from) => {
   NProgress.done()
+})
+axios.interceptors.request.use(config => {
+  Indicator.open({
+    spinnerType: 'snake'
+  })
+  return config
+}, error => {
+  console.log('request error')
+  return Promise.reject(error)
+})
+axios.interceptors.response.use(res => {
+  Indicator.close()
+  if(res.data.result && res.data.result.redirectUrl) {  
+    window.location.href = res.data.result.redirectUrl;
+  }
+  return res;
+}, error => {
+  Indicator.close()
+  console.log(error)
+  return Promise.reject(error)
 })
 /* eslint-disable no-new */
 new Vue({

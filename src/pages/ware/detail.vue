@@ -98,6 +98,7 @@
 				},
 				attributeList: [],
 				keyWords: [],
+				isCollect: false,
 			}
 		},
 		methods: {
@@ -130,11 +131,7 @@
 				let data = {
 					wareId
 				}
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				wareAttribut(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.attrOrder.forEach(attr => {
 							let attrObj = {
@@ -152,18 +149,34 @@
 				let data = {
 					wareId: this.wareId
 				}
-				createWareCollection(data).then(res => {
-					// console.log(res)
-					if(res.data.status === 1) {
-						this.showToast('收藏成功')
-					} else {
-						this.showToast('收藏失败')
-					}
-				})
+				if(this.isCollect) {
+					cancelWareCollection(data).then(res => {
+						if(res.data.status === 1) {
+							this.isCollect = false;
+							this.showToast('取消收藏成功')
+						} else {
+							this.showToast('取消收藏失败')
+						}
+					})
+				} else {
+					createWareCollection(data).then(res => {
+						if(res.data.status === 1) {
+							this.isCollect = true;
+							this.showToast('收藏成功')
+						} else {
+							this.showToast('收藏失败')
+						}
+					})
+				}
+				
 			},
 			handleReserve() {
-				// console.log(this.wareId)
-				this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
+				if(this.isLogin) {
+					this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
+				} else {
+					this.showToast('尚未登录')
+					this.$router.push('/login')
+				}
 			}
 		},
 		computed: {

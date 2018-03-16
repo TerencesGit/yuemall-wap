@@ -8,10 +8,10 @@
 				</router-link>
 			</li>
 			<li class="nav-item">
-				<router-link to="/register">
+				<a href="javascript:;">
 					<!-- <i class="icon icon-contact"></i> -->
 					<span>联系客服</span>
-				</router-link>
+				</a>
 			</li>
 			<li class="nav-item">
 				<router-link to="/login">

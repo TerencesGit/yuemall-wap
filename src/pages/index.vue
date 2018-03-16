@@ -115,12 +115,6 @@
 			ScrollList,
 		},
 		methods: {
-			showToast(msg) {
-				this.$toast({
-					message: msg,
-					duration: 1000,
-				})
-			},
 			getStore() {
 				findStoreByWapDoMain().then(res => {
 					if(res.data.status === 1) {
@@ -146,7 +140,7 @@
 						this.getGlobalWareList()
 						this.getTripWareList()
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -162,7 +156,7 @@
 					if(res.data.status === 1) {
 						this.bannerList = res.data.data;
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -214,7 +208,7 @@
 				// 		this.navList[1] = JSON.parse(_nav)[3];
 				// 		this.navList[3] = JSON.parse(_nav)[1];
 				// 	} else {
-				// 		this.showToast(res.data.msg)
+				// 		this.$showToast(res.data.msg)
 				// 	}
 				// })
 			},
@@ -229,7 +223,7 @@
 						this.cityCode = this.dstCity[0].dstCityCode;
 						this.getRecommentWareList()
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -251,7 +245,7 @@
 					if(res.data.status === 1) {
 						this.recommendWare = res.data.data;
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -266,7 +260,7 @@
 					if(res.data.status === 1) {
 						this.localWareList = res.data.data.wares;
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -285,7 +279,7 @@
 					if(res.data.status === 1) {
 						this.globalWareList = res.data.data.wares;
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
@@ -300,7 +294,7 @@
 					if(res.data.status === 1) {
 						this.tripWareList = res.data.data.wares;
 					} else {
-						this.showToast(res.data.msg)
+						this.$showToast(res.data.msg)
 					}
 				})
 			},
