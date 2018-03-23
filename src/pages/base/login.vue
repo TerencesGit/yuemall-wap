@@ -62,6 +62,7 @@
 						if(res.data.status === 1) {
 							this.$store.dispatch('changeLogin', 1)
 							this.$store.dispatch('saveUserInfo', res.data.data)
+							sessionStorage.setItem('isLogin', 1)
 							this.$showToast('登录成功')
 							if(this.$fromPath.indexOf('register') !== 1) {
 								this.$router.replace(this.$fromPath)

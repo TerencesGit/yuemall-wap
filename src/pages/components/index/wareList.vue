@@ -13,7 +13,9 @@
 						<span>{{ware.unit}}</span>/起
 					</p>
 					<p v-else class="price text-price">
+						<router-link to="/login" class="text-red" tag="span">
 						登录后价格可见
+						</router-link>
 					</p>
 				</div>
 			</router-link>

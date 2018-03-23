@@ -8,7 +8,7 @@
 				</router-link>
 			</li>
 			<li class="nav-item">
-				<a href="javascript:;">
+				<a href="tel:18500137582">
 					<!-- <i class="icon icon-contact"></i> -->
 					<span>联系客服</span>
 				</a>
@@ -24,11 +24,7 @@
 </template>
 <script>
 	export default {
-		data() {
-			return {
-
-			}
-		},
+		name: 'indexFooter',
 	}
 </script>
 <style scoped lang="scss">

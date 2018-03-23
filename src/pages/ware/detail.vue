@@ -1,7 +1,8 @@
 <template>
 	<section>
+		<slef-header :title="'商品详情'"></slef-header>
 		<div class="ware-swipe">
-			<mt-swipe :showIndicators="false">
+			<mt-swipe :showIndicators="false"  :style="{height: bannerHeight}">
 				<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
 					<img :src="item.filePath">
 				</mt-swipe-item>
@@ -22,7 +23,11 @@
 					<span>{{wareDetail.unit}}</span>/起</p>
 				</div>
 				<div v-else>
-					<p class="text-price">登录后价格可见</p>
+					<p class="text-price">
+						<router-link to="/login" tag="span">
+						登录后价格可见
+						</router-link>
+					</p>
 				</div>
 			</div>
 			<div class="detail-item feature">
@@ -49,13 +54,13 @@
 			<ul class="footer-bar">
 				<li class="collection">
 					<a href="javascript:;" @click="handleCollect">
-						<!-- <img src="http://wap.yueshijue.com/detail/image/shou01.png" alt=""> -->
-						<img src="http://wap.yueshijue.com/detail/image/shou02.png" alt="">
-						<p>收藏</p>
+						<img v-show="isCollection != 1" src="http://wap.yueshijue.com/detail/image/shou01.png" alt="">
+						<img v-show="isCollection == 1" src="http://wap.yueshijue.com/detail/image/shou02.png" alt="">
+						<p>{{collection}}</p>
 					</a>
 				</li>
 				<li class="service">
-					<a href="javascript:;">
+					<a href="tel:18500137582">
 						<img src="http://wap.yueshijue.com/detail/image/kefu.png" alt="">
 						<p>客服</p>
 					</a>
@@ -68,8 +73,12 @@
 	</section>
 </template>
 <script>
+	import slefHeader from '../myCenter/selfHeader'
 	import { wareDetail, wareAttribut, createWareCollection, cancelWareCollection } from '@/api'
 	export default {
+		components: {
+			slefHeader
+		},
 		data () {
 			return {
 				wareId: '',
@@ -98,7 +107,9 @@
 				},
 				attributeList: [],
 				keyWords: [],
-				isCollect: false,
+				bannerHeight: '210px',
+				collection: '收藏',
+				isCollection: 0,
 			}
 		},
 		methods: {
@@ -112,18 +123,15 @@
 				let data = {
 					id: wareId
 				}
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				wareDetail(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
-						//  console.log(res.data.data)
-						 this.wareDetail = res.data.data;
-						 document.title = this.wareDetail.wareName;
-						 sessionStorage.setItem('wareName', this.wareDetail.wareName)
-						 this.keyWords = this.wareDetail.keyWords.split(',').splice(0,3);
-						 this.bannerList = this.wareDetail.wareImgInfos;
+						// console.log(res.data.data)
+						this.wareDetail = res.data.data;
+						document.title = this.wareDetail.wareName;
+						this.isCollection = this.wareDetail.collectStatus;
+						sessionStorage.setItem('wareName', this.wareDetail.wareName)
+						this.keyWords = this.wareDetail.keyWords.split(',').splice(0,3);
+						this.bannerList = this.wareDetail.wareImgInfos;
 					}
 				})
 			},
@@ -146,14 +154,19 @@
 				})
 			},
 			handleCollect() {
+				if(!this.isLogin) {
+					this.showToast('请先登录')
+					return;
+				}
 				let data = {
 					wareId: this.wareId
 				}
-				if(this.isCollect) {
+				if(this.isCollection == 1) {
 					cancelWareCollection(data).then(res => {
 						if(res.data.status === 1) {
-							this.isCollect = false;
 							this.showToast('取消收藏成功')
+							this.collection = '收藏';
+							this.isCollection = 0;
 						} else {
 							this.showToast('取消收藏失败')
 						}
@@ -161,8 +174,9 @@
 				} else {
 					createWareCollection(data).then(res => {
 						if(res.data.status === 1) {
-							this.isCollect = true;
 							this.showToast('收藏成功')
+							this.collection = '已收藏';
+							this.isCollection = 1;
 						} else {
 							this.showToast('收藏失败')
 						}
@@ -174,7 +188,7 @@
 				if(this.isLogin) {
 					this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
 				} else {
-					this.showToast('尚未登录')
+					this.showToast('请先登录')
 					this.$router.push('/login')
 				}
 			}
@@ -190,12 +204,18 @@
 				this.getWareDetail(this.wareId)
 				this.getWareAttribute(this.wareId)
 			}
-		}
+		},
+		mounted() {
+			this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			window.onresize = () => {
+				this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
+			}
+		},
+		
 	}
 </script>
 <style scoped lang="scss">
 	.ware-swipe {
-		height: 210px;
 		position: relative;
 		.mint-swipe-item {
 			display: block;

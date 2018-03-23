@@ -3,13 +3,15 @@
         <div class="searchbar">
             <div class="searchbar-inner">
                 <i class="mintui mintui-search"></i>
-                <input type="search" placeholder="搜索目的地" class="mint-searchbar-core">
+                <router-link to="/ware/search" tag="div">
+                    <input type="search" placeholder="搜索目的地" class="mint-searchbar-core">
+                </router-link>
             </div>
             <!-- <mt-search v-model="value" :result.sync="result"></mt-search> -->
         </div>
-        <div class="cart">
+        <!-- <div class="cart">
             <img src="http://wap.yueshijue.com/warp/assets/image/gwc.png">
-        </div>
+        </div> -->
     </header>
 </template>
 <script>
@@ -28,7 +30,7 @@
 <style scoped lang="scss">
     .header {
         display: flex;
-        padding: 5px 15px;
+        padding: 5px 15px 5px 0;
         .cart {
             width: 30px;
             margin-left: 15px;
@@ -44,13 +46,13 @@
                 display: flex;
                 flex: 1;
                 height: 28px;
-            padding: 4px 6px;
-            background: #fff;
-            border-radius: 15px;
-            .mintui-search {
-                margin: 2px 5px 0 0;
-            }
-            }
+                padding: 4px 6px;
+                background: #fff;
+                border-radius: 15px;
+                .mintui-search {
+                    margin: 2px 5px 0 0;
+                }
+                }
         }
     }
 </style>

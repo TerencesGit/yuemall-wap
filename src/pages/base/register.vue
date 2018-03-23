@@ -20,6 +20,12 @@
 				</label>
 				<input type="password" class="form-item-input"  placeholder="请再次输入密码" v-model.trim="form.password2">
 			</div>
+			<div class="form-item bg-white">
+				<label for="" class="form-item-label">
+					<img src="../../assets/img/lock.png" class="icon">
+				</label>
+				<input type="num" class="form-item-input"  placeholder="请输入推荐码,如没有可不填" v-model.trim="form.note">
+			</div>
 			<!-- <div class="form-item bg-white">
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/yzm.png" class="icon">
@@ -27,12 +33,12 @@
 				<input type="text" class="form-item-input"  placeholder="请输入验证码" v-model.trim="form.authCode">
 				<canvas id="canvasCode" width="80px" height="30px" class="canvas-code" @click="drawCode"></canvas>
 			</div> -->
-			<div class="form-item bg-white smscode">
+			<div class="form-item bg-white smscode" style="display: block;">
 				<label for="" class="form-item-label">
 					<img src="../../assets/img/yzm.png" class="icon">
 				</label>
-				<input type="text" class="form-item-input"  placeholder="请输入手机验证码" v-model.trim="form.smsCode">
-				<mt-button type="primary" class="small-size" @click.native="sendCode" :disabled="disabled" style="border-radius: 0">{{buttonText}}</mt-button>
+				<input type="text" class="font-size16"  style="width: 55%;height: 40px;vertical-align: top;" placeholder="请输入手机验证码" v-model.trim="form.smsCode">
+				<mt-button type="primary" class="small-size" @click.native="sendCode" :disabled="disabled" style="float: right;border-radius: 0;">{{buttonText}}</mt-button>
 			</div>
 			<div class="form-button">
 				<mt-button size="large" type="primary" @click.native="onSubmit">立即注册</mt-button>
@@ -52,6 +58,7 @@
 					username: '',
 					password: '',
 					password2: '',
+					note: '',
 					authCode: '',
 					smsCode: '',
 				},
@@ -73,7 +80,7 @@
 				})
 			},
 			countDown () {
-					let count = 10;
+					let count = 60;
 					var timer;
 					timer = setInterval(() => {
 						if (count === 0) {
@@ -87,7 +94,7 @@
 						}, 1000)
 				},
 			sendCode() {
-				if(!this.form.username.match(/^(13|14|15|17|18)\d{9}$/)) {
+				if(!this.form.username.match(/^(13|14|15|16|17|18)\d{9}$/)) {
 							this.$showToast('请输入正确手机号')
 							return;
 						}
@@ -126,10 +133,15 @@
 					code: this.form.smsCode,
 					storeId: this.storeId,
 					registerType: 1,
+					note: this.form.note,
 				}
 				requestRegister(data).then(res => {
 					if(res.data.status === 1) {
 						let userInfo = res.data.data;
+						this.$store.dispatch('changeLogin', 1)
+						this.$store.dispatch('saveUserInfo', userInfo)
+						sessionStorage.setItem('isLogin', 1)
+						this.$router.replace('/')
 						self.$showToast(res.data.msg)
 					} else {
 						self.$showToast(res.data.msg)

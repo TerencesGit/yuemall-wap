@@ -1,9 +1,9 @@
 <template>
 	<section>
 		<HeaederComp :storeLogo="storeLogo"></HeaederComp>
-		<mt-swipe :style="{height: bannerHeight}" v-if="bannerList.length > 0">
+		<mt-swipe :style="{height: bannerHeight}">
 			<mt-swipe-item v-for="(item, index) in bannerList" :key="index">
-				<router-link :to="'/ware/detail?id='+item.linkAddr.split('=')[1]">
+				<router-link :to="'/ware/detail?id='+item.linkAddr.split('?')[1]">
 					<img :src="item.urlAddr" :alt="item.bannerName" :title="item.bannerName" style="height: 100%;">
 				</router-link>
 			</mt-swipe-item>
@@ -31,6 +31,10 @@
 			<!-- <WareList v-if="localWareList.length !== 0" :wareData="localWareList"></WareList> -->
 			<WarekindHead :warekind="warekindObj.local"></WarekindHead>
 			<WareShow :wareData="localWareList"></WareShow>
+		</div>
+		<div class="ware-show native">
+			<WarekindHead :warekind="warekindObj.native"></WarekindHead>
+			<WareShow :wareData="nativeList"></WareShow>
 		</div>
 		<div class="ware-show global">
 			<!-- <ShowTitle :titleName="'全球旅拍'"></ShowTitle> -->
@@ -73,6 +77,7 @@
 				recommendWare: [],
 				checkedIndex: 0,
 				localWareList: [],
+				nativeList: [],
 				globalWareList: [],
 				tripWareList: [],
 				cityCode: '',
@@ -87,6 +92,11 @@
 						name: '本地拍摄',
 						subTitle: 'local photo',
 						moreUrl: '/ware/list?kindId=415193834363537',
+					},
+					native: {
+						name: '全国拍',
+						subTitle: 'native photo',
+						moreUrl: '/ware/list?kindId=715060598102532',
 					},
 					global: {
 						name: '全球旅拍',
@@ -115,6 +125,12 @@
 			ScrollList,
 		},
 		methods: {
+			showToast(msg) {
+				this.$toast({
+					message: msg,
+					duration: 1000,
+				})
+			},
 			getStore() {
 				findStoreByWapDoMain().then(res => {
 					if(res.data.status === 1) {
@@ -132,15 +148,18 @@
 					if(res.data.status === 1) {
 						let store = res.data.data;
 						document.title = store.storeName;
+						// this.storeId = store.merchantId;
 						this.storeLogo = store.storeLogo;
 						this.getBannerList()
 						this.getKindList()
 						this.getDstCity()
+						// sessionStorage.setItem('store', JSON.stringify(store))
 						this.getLocalWareList()
+						this.getNativeWareList()
 						this.getGlobalWareList()
 						this.getTripWareList()
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -148,15 +167,11 @@
 				let data = {
 					merchantId: this.storeId
 				}
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				bannermobilelist(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.bannerList = res.data.data;
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -208,7 +223,7 @@
 				// 		this.navList[1] = JSON.parse(_nav)[3];
 				// 		this.navList[3] = JSON.parse(_nav)[1];
 				// 	} else {
-				// 		this.$showToast(res.data.msg)
+				// 		this.showToast(res.data.msg)
 				// 	}
 				// })
 			},
@@ -223,7 +238,7 @@
 						this.cityCode = this.dstCity[0].dstCityCode;
 						this.getRecommentWareList()
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -237,15 +252,11 @@
 					providerId: this.storeId,
 					dstCityCode: this.cityCode,
 				}
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				recommendware(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.recommendWare = res.data.data;
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -260,14 +271,26 @@
 					if(res.data.status === 1) {
 						this.localWareList = res.data.data.wares;
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
+					}
+				})
+			},
+			getNativeWareList() {
+				let data = {
+					providerId: this.storeId,
+					wareKind: 715060598102532,
+					dstCityCode: '',
+					page: this.page,
+				}
+				findWareListByKind(data).then(res => {
+					if(res.data.status === 1) {
+						this.nativeList = res.data.data.wares;
+					} else {
+						this.showToast(res.data.msg)
 					}
 				})
 			},
 			getGlobalWareList() {
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				let data = {
 					providerId: this.storeId,
 					wareKind: 415057355555522,
@@ -275,11 +298,10 @@
 					page: this.page,
 				}
 				findWareListByKind(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.globalWareList = res.data.data.wares;
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -294,7 +316,7 @@
 					if(res.data.status === 1) {
 						this.tripWareList = res.data.data.wares;
 					} else {
-						this.$showToast(res.data.msg)
+						this.showToast(res.data.msg)
 					}
 				})
 			},
@@ -381,4 +403,5 @@
 		margin-top: 10px;
 		background: #fff;
 	}
+	
 </style>

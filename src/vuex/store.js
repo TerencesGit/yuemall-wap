@@ -4,9 +4,8 @@ import * as actions from './actions'
 import * as getters from './getters'
 Vue.use(Vuex)
 
-
 const state = {
-  	isLogin: 0,
+  isLogin: 0,
 	userInfo: null,
 	storeInfo: null,
 	selfInfo: {},

@@ -1,5 +1,6 @@
 <template>
 	<section class="reserve-page">
+		<slef-header :title="'立即预定'"></slef-header>
 		<div v-title :data-title="$route.name"></div>
 		<div class="page-title">
 			<h3>选择日期和人数</h3>
@@ -95,7 +96,7 @@
 		<div class="fixed-footer">
 			<div class="agreement">
 				<checkbox v-model="agreement"></checkbox>
-				<span class="agreement-text">我已阅读并同意 <a href="javascrirpt:;" @click="agreementVisible = true">预订合同及产品所述全部内容</a></span>
+				<span class="agreement-text">我已阅读并同意 <a href="javascrirpt:;" @click="agreementVisible = true">预订合同及产品所述内容</a></span>
 			</div>
 			<div class="reserve">
 				<div class="total-price">
@@ -109,10 +110,12 @@
 </template>
 <script>
 	import Agreement from './agreement';
+	import slefHeader from '../myCenter/selfHeader'
 	import { wareSkuOfMonth, wareService, advanceOrder } from '@/api'
 	export default {
 		components: {
 			Agreement,
+			slefHeader
 		},
 		data() {
 			return {
@@ -210,11 +213,7 @@
 					id: this. wareId,
 					skuDate: this.skuDate,
 				}
-				this.$indicator.open({
-				  spinnerType: 'snake'
-				})
 				wareService(data).then(res => {
-					this.$indicator.close()
 					if(res.data.status === 1) {
 						this.wareServices = [];
 						let wareServiceInfos = res.data.data.wareServiceInfos;
@@ -285,12 +284,12 @@
 				}
 				// console.log(wareOrderInfo)
 				advanceOrder(wareOrderInfo).then(res => {
-					sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
-					this.$router.push('/ware/order?orderId=415177136070425')
+					// this.$router.push('/ware/order')
 					if(res.data.status === 1) {
-						let orderInfo = res.data.data;
-						sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))
-						// this.$router.push('/ware/reserve?wareId='+this.wareId)
+						sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
+						// let orderInfo = res.data.data;
+						// sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))
+						this.$router.push('/ware/order')
 					} else {
 						this.$toast({
 							message: res.data.msg || '服务器响应失败',
@@ -304,13 +303,9 @@
 			}
 		},
 		created() {
-			if(this.$store.getters.isLogin === 1) {
-				this.wareId = this.$route.query.wareId;
-				this.skuDate = this.currentDate();
-				this.getWareSkuData()
-			} else {
-				this.$router.push('/')
-			}
+			this.wareId = this.$route.query.wareId;
+			this.skuDate = this.currentDate();
+			this.getWareSkuData()
 		}
 	}
 </script>

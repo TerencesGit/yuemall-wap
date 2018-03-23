@@ -5,7 +5,6 @@ import Index from '@/pages/index'
 import WareDetail from '@/pages/ware/detail'
 import WareList from '@/pages/ware/list'
 import WareReserve from '@/pages/ware/reserve'
-import WareAgreement from '@/pages/ware/agreement'
 import WareOrder from '@/pages/ware/order'
 import WarePay from '@/pages/ware/pay'
 import WareSearch from '@/pages/ware/search'
@@ -27,11 +26,12 @@ import selfGifts from '@/pages/myCenter/self-gifts'
 import selfEnshrine from '@/pages/myCenter/self-enshrine'
 import selfNotice from '@/pages/myCenter/self-notice'
 import selfHelp from '@/pages/myCenter/self-help'
+import cancelOrder from '@/pages/myCenter/cancel-order'
 
 const routes = [
   {
     path: '/',
-    redirect: '/index'
+    redirect: '/index',
   },
   {
     path: '/index',
@@ -64,11 +64,6 @@ const routes = [
     component: WareReserve
   },
   {
-    path: '/ware/agreement',
-    name: '商品预定协议页',
-    component: WareAgreement
-  },
-  {
     path: '/ware/order',
     name: '商品订单页',
     component: WareOrder
@@ -96,6 +91,7 @@ const routes = [
   { path: '/myCenter/selfOrder/checkSchedule', name: 'checkSchedule', component: checkSchedule },
   { path: '/myCenter/selfOrder/safetyNotice', name: 'safetyNotice', component: safetyNotice },
   { path: '/myCenter/selfOrder/proSnapshot', name: 'proSnapshot', component: proSnapshot },
+  { path: '/myCenter/selfOrder/cancel-order', name: 'cancel-order', component: cancelOrder },
   { path: '/myCenter/selfGifts', name: 'selfGifts', component: selfGifts },
   { path: '/myCenter/selfEnshrine', name: 'selfEnshrine', component: selfEnshrine },
   { path: '/myCenter/selfNotice', name: 'selfNotice', component: selfNotice },

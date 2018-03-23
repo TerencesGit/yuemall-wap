@@ -1,5 +1,6 @@
 <template>
   <section class="order-page">
+      <slef-header :title="'完善订单信息'"></slef-header>
       <div class="panel">
           <div class="panel-header">
               <h3 class="panel-title">线路信息</h3>
@@ -71,75 +72,79 @@
   </section>
 </template>
 <script>
+    import slefHeader from '../myCenter/selfHeader'
     import { createOrder } from '@/api'
 export default {
-  data() {
-      return {
-          wareName: '',
-          wareOrderInfo: {},
-          contactForm: {
-              contactName: '',
-              contactMobile: '',
-              contactEmail: '',
-              sex: 1,
-          },
-      }
-  },
-  methods: {
-      handleRadio(val) {
-          this.contactForm.sex = val;
-      },
-      submitOrder() {
-            if(!this.contactForm.contactName) {
-                this.$toast({
-                    message: '请输入联系人姓名',
-                    duration: 1000,
-                })
-                return;
-            } else if (!this.contactForm.contactMobile.match(/^(13|14|15|17|18)\d{9}$/)) {
-                this.$toast({
-                    message: '请输入正确手机号',
-                    duration: 1000,
-                })
-                return;
-            } else if (!this.contactForm.contactEmail.match(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)) {
-                this.$toast({
-                  message: '请输入正确邮箱号',
-                  duration: 1000,
-                })
-                return;
-            }
-            console.log(Object.assign({},this.contactForm))
-            let wareOrderInfo = Object.assign({},this.wareOrderInfo)
-            let { contactName, contactMobile, contactEmail, sex } = this.contactForm;
-            wareOrderInfo.contactName = contactName;
-            wareOrderInfo.contactMobile = contactMobile;
-            wareOrderInfo.contactEmail = contactEmail;
-            wareOrderInfo.sex = sex;
-            console.log(wareOrderInfo)
-            createOrder(wareOrderInfo).then(res => {
-                console.log(res)
-                // this.$router.push('/ware/pay?payId=415177136070425')
-                if(res.data.status === 1) {
-                    let payId = res.data.data;
-                    sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
-                    this.$router.push('/ware/pay?payId='+payId)
-                } else {
-                    this.$toast({
-                        message: res.data.msg || '服务器响应失败',
-                        duration: 1000
+    components: {
+            slefHeader
+    },
+    data() {
+        return {
+            wareName: '',
+            wareOrderInfo: {},
+            contactForm: {
+                contactName: '',
+                contactMobile: '',
+                contactEmail: '',
+                sex: 1,
+            },
+        }
+    },
+    methods: {
+        handleRadio(val) {
+            this.contactForm.sex = val;
+        },
+        submitOrder() {
+                if(!this.contactForm.contactName) {
+                        this.$toast({
+                            message: '请输入联系人姓名',
+                            duration: 1000,
+                        })
+                        return;
+                    } else if (!this.contactForm.contactMobile.match(/^(13|14|15|17|18)\d{9}$/)) {
+                        this.$toast({
+                            message: '请输入正确手机号',
+                            duration: 1000,
+                        })
+                        return;
+                    } else if (!this.contactForm.contactEmail.match(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)) {
+                        this.$toast({
+                        message: '请输入正确邮箱号',
+                        duration: 1000,
+                        })
+                        return;
+                    }
+                    console.log(Object.assign({},this.contactForm))
+                    let wareOrderInfo = Object.assign({},this.wareOrderInfo)
+                    let { contactName, contactMobile, contactEmail, sex } = this.contactForm;
+                    wareOrderInfo.contactName = contactName;
+                    wareOrderInfo.contactMobile = contactMobile;
+                    wareOrderInfo.contactEmail = contactEmail;
+                    wareOrderInfo.sex = sex;
+                    console.log(wareOrderInfo)
+                    createOrder(wareOrderInfo).then(res => {
+                        console.log(res)
+                        // this.$router.push('/ware/pay?payId=415177136070425')
+                        if(res.data.status === 1) {
+                            let payId = res.data.data;
+                            sessionStorage.setItem('wareOrderInfo', JSON.stringify(wareOrderInfo))
+                            this.$router.push('/ware/pay?payId='+payId)
+                        } else {
+                            this.$toast({
+                                message: res.data.msg || '服务器响应失败',
+                                duration: 1000
+                            })
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        this.$catchError(err)
                     })
-                }
-            }).catch(err => {
-                console.log(err)
-                this.$catchError(err)
-            })
-      }
-  },
-  created() {
-      this.wareName = sessionStorage.getItem('wareName');
-      this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
-  }
+            }
+        },
+        created() {
+            this.wareName = sessionStorage.getItem('wareName');
+            this.wareOrderInfo = JSON.parse(sessionStorage.getItem('wareOrderInfo'));
+        }
 }
 </script>
 <style lang="scss" scoped>
@@ -181,7 +186,7 @@ export default {
     }
     .form-item {
         height: 40px;
-        line-height: 30px;
+        line-height: 25px;
         margin-bottom: 15px;
         padding-bottom: 10px;
         border-bottom: 1px dashed #ccc;
@@ -193,6 +198,7 @@ export default {
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
+            vertical-align: middle;
         }
         .radio {
             margin-right: 15px;

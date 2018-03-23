@@ -28,7 +28,7 @@ Vue.directive('title', {
 })
 NProgress.configure({ ease: 'ease', speed: 500, minimum: 0.5, showSpinner: false})
 const router = new Router({
-	routes
+  routes
 })
 Vue.config.productionTip = false
 Vue.prototype.$catchError = (err) => {
@@ -51,10 +51,8 @@ Vue.prototype.$showToast = (msg, duration = 1000) => {
 router.beforeEach((to, from, next) => {
   Vue.prototype.$fromPath = from.fullPath;
   NProgress.start()
-  // console.log(to)
-  // console.log(store.getters.isLogin)
   let isMyCenterPage = to.path.indexOf('myCenter') === 1 || to.path.indexOf('mycenter') === 1;
-  let isLogin = store.getters.isLogin;
+  let isLogin = store.getters.isLogin || sessionStorage.getItem('isLogin');
   if(isMyCenterPage && isLogin !== 1) {
     router.push('/login')
     return;

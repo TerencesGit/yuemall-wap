@@ -1,5 +1,6 @@
 <template>
   <section>
+    <slef-header :title="'列表详情'"></slef-header>
     <SearchHeader></SearchHeader>
     <mt-swipe :style="{height: bannerHeight}">
       <mt-swipe-item v-for="(item, index) in bannerList" :key="index">
@@ -35,11 +36,13 @@
   import axios from 'axios'
   import { findDstList, findWareListByKind } from '@/api'
   import SearchHeader from "../components/warelist/header"
+  import slefHeader from '../myCenter/selfHeader'
   import WareList from "../components/index/wareList"
   export default {
     components:{
       SearchHeader,
       WareList,
+      slefHeader,
     },
     data() {
       return {

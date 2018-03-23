@@ -6,7 +6,9 @@
 		<div class="searchbar">
 			<div class="searchbar-inner">
 				<i class="mintui mintui-search"></i>
-				<input type="search" placeholder="搜索目的地" class="mint-searchbar-core" @click="handleClick">
+				<router-link to="/ware/search">
+					<input type="search" placeholder="搜索目的地" class="mint-searchbar-core">
+				</router-link>
 			</div>
 		</div>
 	</header>
@@ -21,9 +23,6 @@
 			}
 		},
 		methods: {
-			handleClick() {
-				this.$router.push('/ware/search')
-			}
 		},
 	}
 </script>
