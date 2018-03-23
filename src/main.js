@@ -49,11 +49,10 @@ Vue.prototype.$showToast = (msg, duration = 1000) => {
   })
 }
 router.beforeEach((to, from, next) => {
-  Vue.prototype.$fromPath = from.fullPath;
-  console.log(to.meta)
   NProgress.start()
-  if(to.meta && to.meta.requireAuth && store.getters.isLogin !== 1) {
-      router.push('/login')
+  let isLogin = sessionStorage.getItem('isLogin');
+  if(to.meta && to.meta.requireAuth && isLogin != 1) {
+      router.push(`/login?redirect=${to.fullPath}`)
       return;
   }
   next()

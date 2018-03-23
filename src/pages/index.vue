@@ -136,7 +136,6 @@
 					if(res.data.status === 1) {
 						this.storeId = res.data.data;
 						sessionStorage.setItem('storeId', this.storeId)
-						this.$store.dispatch('loadUserInfo',true)
 						this.getMerchantStore()
 					}
 				})

@@ -16,9 +16,9 @@ export const saveAddress = ({ commit }, address) => {
 }
 export const loadUserInfo = ({ commit }) => {
 	isLogin().then(res => {
-		console.log(res.data)
 		if(res.data.status === 1) {
 			commit('CHANGE_LOGIN', 1)
+			commit('SAVE_USERINFO', res.data.data)
 		} else {
 			commit('CHANGE_LOGIN', 0)
 		}

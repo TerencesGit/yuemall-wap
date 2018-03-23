@@ -22,11 +22,11 @@
     </div>
     <div class="recommend-wrap bg-white">
       <div class="recommend-title">
-        <img src="http://wap.yueshijue.com/warp/assets/image/jingxuantuijian.png">
+        <img src="/static/image/jingxuantuijian.png">
         <strong>精选推荐</strong>
       </div>
       <div class="recommend-wares">
-        <WareList :wareData="wareList"></WareList>
+        <WareList :wareData="wareList" :currentRoute="$route.fullPath"></WareList>
       </div>
     </div>
   </section>
@@ -59,12 +59,6 @@
       }
     },
     methods: {
-      showToast(msg) {
-        this.$toast({
-          message: msg,
-          duration: 1000,
-        })
-      },
       getDstCityList() {
         let data = {
           providerId: this.storeId,
@@ -89,7 +83,6 @@
       getDstCitiesByWareKind() {
 	    	let url = `/portal/api/waretripinfo/findSrcAndDstListByWareKind/${this.storeId}?wareKindId=${this.wareKind}`;
 	    	axios.get(url).then(res => {
-	    		// console.log(res)
 	    		if(res.data.status === 1) {
 	    			this.dstCityList = res.data.data.dstCities;
 	    		} else {
@@ -112,7 +105,7 @@
           if(res.data.status === 1) {
             this.wareList = res.data.data.wares;
           } else {
-            this.showToast(res.data.msg)
+            this.$showToast(res.data.msg)
           }
         })
       },
@@ -124,6 +117,7 @@
 			}
     },
     created() {
+     this.$store.dispatch('loadUserInfo')
       this.storeId = sessionStorage.getItem('storeId');
       this.wareKind = this.$route.query.kindId;
       this.getDstCitiesByWareKind()

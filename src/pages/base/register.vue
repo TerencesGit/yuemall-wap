@@ -50,6 +50,7 @@
 	</div>
 </template>
 <script>
+	import Utils from '@/assets/js/utils'
 	import { findStoreByWapDoMain, requestRegister, smsverificode } from '@/api'
 	export default {
 		data() {
@@ -66,6 +67,7 @@
 				authCode: '',
 				buttonText: '获取验证码',
 				disabled: false,
+				redirectUrl: '',
 			}
 		},
 		methods: {
@@ -141,6 +143,8 @@
 						this.$store.dispatch('changeLogin', 1)
 						this.$store.dispatch('saveUserInfo', userInfo)
 						sessionStorage.setItem('isLogin', 1)
+						Utils.setCookie('username', data.username, '30d')
+						Utils.setCookie('password', data.password, '30d')
 						this.$router.replace('/')
 						self.$showToast(res.data.msg)
 					} else {
@@ -149,10 +153,12 @@
 				})
 			},
 			handleSignin() {
-				this.$router.push('/login')
+				let url = this.redirectUrl ? `/login?redirect=${this.redirectUrl}` : '/login';
+				this.$router.push(url)
 			},
 		},
 		created() {
+			this.redirectUrl = this.$route.query.redirect;
 			this.storeId = sessionStorage.getItem('storeId');
 			if(!this.storeId) this.getStore()
 		}

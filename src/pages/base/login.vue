@@ -24,11 +24,13 @@
 	</div>
 </template>
 <script>
+	import Utils from '@/assets/js/utils'
 	import { findStoreByWapDoMain, requestLogin } from '@/api'
 	export default {
 		data() {
 			return {
 				storeId: '',
+				redirectUrl: '',
 				form: {
 					username: '',
 					password: '',
@@ -64,8 +66,10 @@
 							this.$store.dispatch('saveUserInfo', res.data.data)
 							sessionStorage.setItem('isLogin', 1)
 							this.$showToast('登录成功')
-							if(this.$fromPath.indexOf('register') !== 1) {
-								this.$router.replace(this.$fromPath)
+							Utils.setCookie('username', data.username, '30d')
+							Utils.setCookie('password', data.password, '30d')
+							if(this.redirectUrl) {
+								this.$router.replace(this.redirectUrl)
 							} else {
 								this.$router.replace('/')
 							}
@@ -76,12 +80,20 @@
 				}
 			},
 			handleSignup() {
-				this.$router.push('/register')
+				let url = this.redirectUrl ? `/register?redirect=${this.redirectUrl}` : '/register';
+				this.$router.push(url)
 			}
 		},
 		created() {
+			this.redirectUrl = this.$route.query.redirect;
 			this.storeId = sessionStorage.getItem('storeId');
 			if(!this.storeId) this.getStore()
+			if(Utils.getCookie('username')) {
+				this.form.username = Utils.getCookie('username');
+			}
+			if(Utils.getCookie('password')) {
+				this.form.password = Utils.getCookie('password');
+			}
 		}
 	}
 </script>

@@ -118,7 +118,7 @@
             </mt-tab-container>  
         </div>
         <!-- 目的地 -->
-        <WareList :wareData="wareList" v-show="!isFilter" style="background-color: #fff;"></WareList>
+        <WareList :wareData="wareList" :currentRoute="$route.fullPath" v-show="!isFilter" style="background-color: #fff;"></WareList>
     </div>
 </template>
 

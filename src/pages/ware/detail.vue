@@ -24,7 +24,7 @@
 				</div>
 				<div v-else>
 					<p class="text-price">
-						<router-link to="/login" tag="span">
+						<router-link :to="'/login?redirect='+$route.fullPath" tag="span">
 						登录后价格可见
 						</router-link>
 					</p>
@@ -113,12 +113,6 @@
 			}
 		},
 		methods: {
-			showToast(msg) {
-				this.$toast({
-					message: msg,
-					duration: 1000,
-				})
-			},
 			getWareDetail(wareId) {
 				let data = {
 					id: wareId
@@ -155,7 +149,7 @@
 			},
 			handleCollect() {
 				if(!this.isLogin) {
-					this.showToast('请先登录')
+					this.$showToast('请先登录')
 					return;
 				}
 				let data = {
@@ -164,21 +158,21 @@
 				if(this.isCollection == 1) {
 					cancelWareCollection(data).then(res => {
 						if(res.data.status === 1) {
-							this.showToast('取消收藏成功')
+							this.$showToast('取消收藏成功')
 							this.collection = '收藏';
 							this.isCollection = 0;
 						} else {
-							this.showToast('取消收藏失败')
+							this.$showToast('取消收藏失败')
 						}
 					})
 				} else {
 					createWareCollection(data).then(res => {
 						if(res.data.status === 1) {
-							this.showToast('收藏成功')
+							this.$showToast('收藏成功')
 							this.collection = '已收藏';
 							this.isCollection = 1;
 						} else {
-							this.showToast('收藏失败')
+							this.$showToast('收藏失败')
 						}
 					})
 				}
@@ -188,8 +182,8 @@
 				if(this.isLogin) {
 					this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
 				} else {
-					this.showToast('请先登录')
-					this.$router.push('/login')
+					this.$showToast('请先登录')
+					this.$router.push(`/login?redirect=${this.$route.fullPath}`)
 				}
 			}
 		},
@@ -199,6 +193,7 @@
 			}
 		},
 		created() {
+			this.$store.dispatch('loadUserInfo')
 			this.wareId = this.$route.query.id;
 			if(this.wareId) {
 				this.getWareDetail(this.wareId)
@@ -211,7 +206,6 @@
 				this.bannerHeight = (document.body.clientWidth / 2.18) + 'px';
 			}
 		},
-		
 	}
 </script>
 <style scoped lang="scss">

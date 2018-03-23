@@ -13,7 +13,7 @@
 						<span>{{ware.unit}}</span>/起
 					</p>
 					<p v-else class="price text-price">
-						<router-link to="/login" class="text-red" tag="span">
+						<router-link :to="loginUrl" class="text-red" tag="span">
 						登录后价格可见
 						</router-link>
 					</p>
@@ -25,10 +25,15 @@
 <script>
 	export default {
 		name: 'wareList',
-		props: ['wareData'],
+		props: ['wareData', 'currentRoute'],
 		data() {
 			return {
 				isLogin: 0
+			}
+		},
+		computed: {
+			loginUrl() {
+				return this.currentRoute ? `/login?redirect=${this.currentRoute}` : '/login';
 			}
 		},
 		created() {
