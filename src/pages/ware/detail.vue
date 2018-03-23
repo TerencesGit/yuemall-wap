@@ -54,14 +54,14 @@
 			<ul class="footer-bar">
 				<li class="collection">
 					<a href="javascript:;" @click="handleCollect">
-						<img v-show="isCollection != 1" src="http://wap.yueshijue.com/detail/image/shou01.png" alt="">
-						<img v-show="isCollection == 1" src="http://wap.yueshijue.com/detail/image/shou02.png" alt="">
+						<img v-show="isCollection != 1" src="/static/image/shou01.png">
+						<img v-show="isCollection == 1" src="/static/image/shou02.png">
 						<p>{{collection}}</p>
 					</a>
 				</li>
 				<li class="service">
 					<a href="tel:18500137582">
-						<img src="http://wap.yueshijue.com/detail/image/kefu.png" alt="">
+						<img src="/static/image/kefu.png">
 						<p>客服</p>
 					</a>
 				</li>

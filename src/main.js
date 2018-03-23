@@ -50,12 +50,11 @@ Vue.prototype.$showToast = (msg, duration = 1000) => {
 }
 router.beforeEach((to, from, next) => {
   Vue.prototype.$fromPath = from.fullPath;
+  console.log(to.meta)
   NProgress.start()
-  let isMyCenterPage = to.path.indexOf('myCenter') === 1 || to.path.indexOf('mycenter') === 1;
-  let isLogin = store.getters.isLogin || sessionStorage.getItem('isLogin');
-  if(isMyCenterPage && isLogin !== 1) {
-    router.push('/login')
-    return;
+  if(to.meta && to.meta.requireAuth && store.getters.isLogin !== 1) {
+      router.push('/login')
+      return;
   }
   next()
 })

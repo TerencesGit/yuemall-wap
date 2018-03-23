@@ -1,3 +1,4 @@
+import { isLogin } from '@/api'
 export const changeLogin = ({ commit }, status) => {
 	commit('CHANGE_LOGIN', status)
 }
@@ -12,4 +13,14 @@ export const saveSelfInfo = ({ commit }, selfInfo) => {
 }
 export const saveAddress = ({ commit }, address) => {
 	commit('SAVE_ADDRESS', address)
+}
+export const loadUserInfo = ({ commit }) => {
+	isLogin().then(res => {
+		console.log(res.data)
+		if(res.data.status === 1) {
+			commit('CHANGE_LOGIN', 1)
+		} else {
+			commit('CHANGE_LOGIN', 0)
+		}
+	})
 }

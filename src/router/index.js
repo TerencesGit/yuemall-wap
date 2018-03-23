@@ -61,40 +61,43 @@ const routes = [
   {
     path: '/ware/reserve',
     name: '商品预定页',
-    component: WareReserve
+    component: WareReserve,
+    meta: {requireAuth: true}
   },
   {
     path: '/ware/order',
     name: '商品订单页',
-    component: WareOrder
+    component: WareOrder,
+    meta: {requireAuth: true}
   },
   {
     path: '/ware/pay',
     name: '商品支付页',
-    component: WarePay
+    component: WarePay,
+    meta: {requireAuth: true}
   },
   {
     path: '/ware/search',
     name: '点击搜索',
     component: WareSearch
   },
-  { path: '/myCenter', name: '个人中心', component: myCenter},
-  { path: '/myCenter/selfInfo', name: 'selfInfo', component: selfInfo },
-  { path: '/myCenter/nickname',name: 'nickName',component: nickName },
-  { path: '/myCenter/email',name: 'email',component: email },
-  { path: '/myCenter/phone', name: 'phone', component: phone },
-  { path: '/myCenter/deliverAddress', name: 'deliverAddress', component: deliverAddress},
-  { path: '/myCenter/deliverAddress/edit', name: 'edit', component: edit },
-  { path: '/myCenter/deliverAddress/addAddress', name: 'addAddress', component: addAddress },
-  { path: '/myCenter/selfOrder', name: 'selfOrder', component: selfOrder },
-  { path: '/myCenter/selfOrder/orderDetail', name: 'orderDetail', component: orderDetail },
-  { path: '/myCenter/selfOrder/checkSchedule', name: 'checkSchedule', component: checkSchedule },
-  { path: '/myCenter/selfOrder/safetyNotice', name: 'safetyNotice', component: safetyNotice },
-  { path: '/myCenter/selfOrder/proSnapshot', name: 'proSnapshot', component: proSnapshot },
-  { path: '/myCenter/selfOrder/cancel-order', name: 'cancel-order', component: cancelOrder },
-  { path: '/myCenter/selfGifts', name: 'selfGifts', component: selfGifts },
-  { path: '/myCenter/selfEnshrine', name: 'selfEnshrine', component: selfEnshrine },
-  { path: '/myCenter/selfNotice', name: 'selfNotice', component: selfNotice },
-  { path: '/myCenter/selfHelp', name: 'selfHelp', component: selfHelp },
+  { path: '/myCenter', name: '个人中心', component: myCenter, meta: {requireAuth: true} },
+  { path: '/myCenter/selfInfo', name: 'selfInfo', component: selfInfo, meta: {requireAuth: true} },
+  { path: '/myCenter/nickname',name: 'nickName',component: nickName, meta: {requireAuth: true} },
+  { path: '/myCenter/email',name: 'email',component: email, meta: {requireAuth: true} },
+  { path: '/myCenter/phone', name: 'phone', component: phone, meta: {requireAuth: true} },
+  { path: '/myCenter/deliverAddress', name: 'deliverAddress', component: deliverAddress, meta: {requireAuth: true} },
+  { path: '/myCenter/deliverAddress/edit', name: 'edit', component: edit, meta: {requireAuth: true} },
+  { path: '/myCenter/deliverAddress/addAddress', name: 'addAddress', component: addAddress, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder', name: 'selfOrder', component: selfOrder, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder/orderDetail', name: 'orderDetail', component: orderDetail, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder/checkSchedule', name: 'checkSchedule', component: checkSchedule, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder/safetyNotice', name: 'safetyNotice', component: safetyNotice, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder/proSnapshot', name: 'proSnapshot', component: proSnapshot, meta: {requireAuth: true} },
+  { path: '/myCenter/selfOrder/cancel-order', name: 'cancel-order', component: cancelOrder, meta: {requireAuth: true} },
+  { path: '/myCenter/selfGifts', name: 'selfGifts', component: selfGifts, meta: {requireAuth: true} },
+  { path: '/myCenter/selfEnshrine', name: 'selfEnshrine', component: selfEnshrine, meta: {requireAuth: true} },
+  { path: '/myCenter/selfNotice', name: 'selfNotice', component: selfNotice, meta: {requireAuth: true} },
+  { path: '/myCenter/selfHelp', name: 'selfHelp', component: selfHelp, meta: {requireAuth: true} },
 ]
 export default routes

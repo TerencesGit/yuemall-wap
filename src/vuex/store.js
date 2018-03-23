@@ -28,8 +28,6 @@ const mutations = {
 		state.address = address
 	}
 }
-
-
 export default new Vuex.Store({
 	state,
 	actions,
