@@ -7,6 +7,3 @@ export const userInfo = state => {
 export const storeInfo = state => {
 	return state.storeInfo
 }
-// export const selfInfo = state => {
-// 	return state.selfInfo
-// }

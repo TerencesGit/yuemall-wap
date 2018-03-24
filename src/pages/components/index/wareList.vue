@@ -26,19 +26,14 @@
 	export default {
 		name: 'wareList',
 		props: ['wareData', 'currentRoute'],
-		data() {
-			return {
-				isLogin: 0
-			}
-		},
 		computed: {
 			loginUrl() {
 				return this.currentRoute ? `/login?redirect=${this.currentRoute}` : '/login';
+			},
+			isLogin() {
+				return this.$store.getters.isLogin;
 			}
 		},
-		created() {
-			this.isLogin = this.$store.getters.isLogin;
-		}
 	}
 </script>
 <style scoped lang="scss">
