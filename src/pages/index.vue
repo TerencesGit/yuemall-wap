@@ -148,12 +148,10 @@
 					if(res.data.status === 1) {
 						let store = res.data.data;
 						document.title = store.storeName;
-						// this.storeId = store.merchantId;
 						this.storeLogo = store.storeLogo;
 						this.getBannerList()
 						this.getKindList()
 						this.getDstCity()
-						// sessionStorage.setItem('store', JSON.stringify(store))
 						this.getLocalWareList()
 						this.getNativeWareList()
 						this.getGlobalWareList()

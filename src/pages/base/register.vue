@@ -75,7 +75,6 @@
 				findStoreByWapDoMain().then(res => {
 					if(res.data.status === 1) {
 						this.storeId = res.data.data;
-						sessionStorage.setItem('storeId', this.storeId)
 					} else {
 						this.$showToast('获取商户信息失败')
 					}
@@ -142,7 +141,6 @@
 						let userInfo = res.data.data;
 						this.$store.dispatch('changeLogin', 1)
 						this.$store.dispatch('saveUserInfo', userInfo)
-						sessionStorage.setItem('isLogin', 1)
 						Utils.setCookie('username', data.username, '30d')
 						Utils.setCookie('password', data.password, '30d')
 						this.$router.replace('/')

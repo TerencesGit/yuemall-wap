@@ -30,6 +30,8 @@
 <style scoped lang="scss">
 	.fixed-navbar {
 		position: fixed;
+		left: 0;
+		right: 0;
 		bottom: 0;
 		z-index: 99;
 		width: 100%;
@@ -43,6 +45,9 @@
 				text-align: center;
 				line-height: 40px;
 				border-right: 1px solid rgb(10,10,10);
+				&:last-child {
+					border-right: 0;
+				}
 				a {
 					display: block;
 					width: 100%;

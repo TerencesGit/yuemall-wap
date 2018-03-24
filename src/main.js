@@ -50,12 +50,19 @@ Vue.prototype.$showToast = (msg, duration = 1000) => {
 }
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  let isLogin = sessionStorage.getItem('isLogin');
-  if(to.meta && to.meta.requireAuth && isLogin != 1) {
-      router.push(`/login?redirect=${to.fullPath}`)
-      return;
+  if(to.meta && to.meta.requireAuth) {
+    let checkLogin = async () => {
+      const isLogin = await store.dispatch('loadUserInfo')
+      if(isLogin === 1) {
+        next()
+      } else {
+        next(`/login?redirect=${to.fullPath}`)
+      }
+    }
+    checkLogin()
+  } else {
+    next()
   }
-  next()
 })
 router.afterEach((to, from) => {
   NProgress.done()
