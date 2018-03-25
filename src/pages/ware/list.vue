@@ -53,8 +53,10 @@
         wareList: [],
         bannerHeight: '180px',
         bannerList: [
-          'http://ums.yueshijue.com/UmsUpload/resource/201803/F51206197BB24A75AC382A0ED393D7EE_1520414112793.jpg',
-          'http://ums.yueshijue.com/UmsUpload/resource/201803/C724A039E6324DFC929D8FCEDD6A574F_1520413574591.jpg',
+          '/static/image/banner1.jpg',
+          '/static/image/banner2.jpg',
+          // 'http://ums.yueshijue.com/UmsUpload/resource/201803/F51206197BB24A75AC382A0ED393D7EE_1520414112793.jpg',
+          // 'http://ums.yueshijue.com/UmsUpload/resource/201803/C724A039E6324DFC929D8FCEDD6A574F_1520413574591.jpg',
         ]
       }
     },

@@ -88,7 +88,7 @@
                                 <a href="#">不限</a>
                             </li>
                             <li v-for="(item,i) in 11" :key="i" :class="{ active: dateIndex == i }" @click="dateIndex = i, isactive = false">
-                                <a href="#">第{{i+1}}天</a>
+                                <a href="#">{{i+1}}天</a>
                             </li>
                         </ul>
                         <mt-cell title="目的地城市"></mt-cell>
