@@ -179,12 +179,12 @@
 				
 			},
 			handleReserve() {
-				if(this.isLogin) {
-					this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
-				} else {
-					this.$showToast('请先登录')
-					this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-				}
+				this.$router.push(`/ware/reserve?wareId=${this.wareId}`)
+				// if(this.isLogin) {
+				// } else {
+				// 	this.$showToast('请先登录')
+				// 	this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+				// }
 			}
 		},
 		computed: {

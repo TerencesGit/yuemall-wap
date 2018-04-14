@@ -42,10 +42,10 @@ Vue.prototype.$catchError = (err) => {
     Toast('服务器响应超时')
   }
 }
-Vue.prototype.$showToast = (msg, duration = 1000) => {
+Vue.prototype.$showToast = (message, duration = 1000) => {
   Toast({
-    message: msg,
-    duration: duration
+    message,
+    duration,
   })
 }
 router.beforeEach((to, from, next) => {

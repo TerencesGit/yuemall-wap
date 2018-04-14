@@ -160,12 +160,17 @@ export default {
         };  
     },
     created() {
-        this.getDateList();
-        this.getFindWareListByKind(' ')
+        let searchName = this.$route.query.searchName;
+        if(searchName) {
+            this.searchName = searchName;
+            this.search()
+        } else {
+            this.getDateList();
+            this.getFindWareListByKind(' ')
+        }
     },
     methods: {
         search() {
-            this.wareList = []
             let data = {
                 providerId: sessionStorage.getItem('storeId'),
                 searchCondition: this.searchName
@@ -175,6 +180,7 @@ export default {
                     this.wareList = res.data.data.wareTripInfos
                 }
             })
+            this.$router.push(`/ware/search?searchName=${this.searchName}`)
         },
         open(picker) {
             this.$refs[picker].open();
@@ -209,10 +215,10 @@ export default {
             this.getFindWareListByKind(this.wareKindId)
         },
         confirm1() {
-            console.log(this.dateIndex.toString())
-            console.log(this.dstCityCode.toString())
-            console.log(this.startDay)
-            console.log(this.endDay)
+            // console.log(this.dateIndex.toString())
+            // console.log(this.dstCityCode.toString())
+            // console.log(this.startDay)
+            // console.log(this.endDay)
             var query = { salesSort: 1 }
             if(this.dateIndex == -1) {
                 this.tripDays = ''
